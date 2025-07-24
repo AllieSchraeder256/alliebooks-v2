@@ -31,12 +31,4 @@ public class RentPayment extends BaseModel {
 	@ManyToOne
 	@JoinColumn(name="lease_id", insertable=false, updatable=false)
 	private Lease lease;
-
-	@Column(name="property_id", insertable=false, updatable=false)
-	private UUID propertyId;
-
-	@ManyToOne
-	@JoinColumn(name="property_id")
-	@JsonIgnore
-	private Property property;
 }

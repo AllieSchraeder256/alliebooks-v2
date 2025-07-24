@@ -11,5 +11,5 @@ import java.util.UUID;
 
 @Repository
 public interface UnitRepo extends JpaRepository<Unit, UUID> {
-    List<Unit> findByPropertyIdAndDeletedFalseOrderByName(UUID propertyId);
+    List<Unit> findByPropertyId(UUID propertyId);
 }

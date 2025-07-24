@@ -13,6 +13,7 @@ export const AppNavbar = () => {
                     <Navbar.Brand href="/">Alliebooks</Navbar.Brand>
                     <Nav>
                         <Nav.Link href="/properties">Properties</Nav.Link>
+                        <Nav.Link href="/tenants">Tenants</Nav.Link>
                         <Nav.Link href="/expense-types">Expense Types</Nav.Link>
                     </Nav>
                 </Container>

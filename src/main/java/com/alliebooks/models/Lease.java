@@ -1,6 +1,7 @@
 package com.alliebooks.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,17 +11,19 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name="rent_payments")
+@Table(name="leases")
 @Getter
 @Setter
 public class Lease extends BaseModel {
 	private double balance;
 
-	@Column(name="lease_start")
-	private Instant leaseStartDate;
+	@Column(name="startDate")
+	private Instant startDate;
 
-	@Column(name="lease_end")
-	private Instant leaseEndDate;
+	@Column(name="endDate")
+	private Instant endDate;
+
+	private boolean current;
 
 	@Column(name="unit_id")
 	private UUID unitId;
@@ -34,5 +37,6 @@ public class Lease extends BaseModel {
 	private List<RentPayment> rentPayments;
 
 	@OneToMany(mappedBy="lease")
-	private List<Tenant> tenants;
+	@JsonIgnoreProperties("lease")
+	private List<TenantLease> tenantLeases;
 }

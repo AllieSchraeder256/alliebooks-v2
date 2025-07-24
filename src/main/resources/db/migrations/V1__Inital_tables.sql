@@ -36,8 +36,9 @@ CREATE UNIQUE INDEX unique_name_property_units on units (name, property_id) WHER
 CREATE TABLE leases (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     balance NUMERIC(10,2),
-    lease_start TIMESTAMP,
-    lease_end TIMESTAMP,
+    current BOOLEAN NOT NULL DEFAULT TRUE,
+    start_date TIMESTAMP,
+    end_date TIMESTAMP,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP,
     deleted BOOLEAN NOT NULL DEFAULT FALSE,
@@ -83,6 +84,5 @@ CREATE TABLE rent_payments (
     updated_at TIMESTAMP,
     deleted BOOLEAN NOT NULL DEFAULT FALSE,
     deleted_at TIMESTAMP,
-    lease_id UUID REFERENCES leases(id),
-    property_id UUID REFERENCES properties(id)
+    lease_id UUID REFERENCES leases(id)
 );

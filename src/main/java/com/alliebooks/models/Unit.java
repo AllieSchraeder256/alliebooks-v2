@@ -1,6 +1,8 @@
 package com.alliebooks.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,7 +25,7 @@ public class Unit extends BaseModel {
 
     @ManyToOne
     @JoinColumn(name="property_id")
-    @JsonIgnore
+    @JsonIgnoreProperties("units")
     private Property property;
 
     @OneToMany(mappedBy="unit")

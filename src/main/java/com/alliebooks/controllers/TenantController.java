@@ -1,7 +1,9 @@
 package com.alliebooks.controllers;
 
 import com.alliebooks.models.Lease;
+import com.alliebooks.models.Tenant;
 import com.alliebooks.services.LeaseService;
+import com.alliebooks.services.TenantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,13 +18,17 @@ public class TenantController {
     @Autowired
     private LeaseService leaseService;
 
+    @Autowired
+    private TenantService tenantService;
+
     @GetMapping("/current-leases")
     public List<Lease> getCurrentLeases() {
         return leaseService.getCurrentLeases();
     }
-    @GetMapping("/unleased")
-    public List<Lease> getUnleasedTenants() {
-        return leaseService.getUnleasedTenants();
+
+    @GetMapping
+    public List<Tenant> getAllTenants() {
+        return tenantService.getTenants();
     }
 
     @PostMapping

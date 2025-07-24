@@ -2,8 +2,8 @@ package com.alliebooks.controllers;
 
 import com.alliebooks.models.ExpenseType;
 import com.alliebooks.models.Property;
-import com.alliebooks.services.ExpenseTypeService;
 import com.alliebooks.services.PropertyService;
+import com.alliebooks.services.UnitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +18,9 @@ import java.util.UUID;
 public class PropertyController {
     @Autowired
     private PropertyService propertyService;
+
+    @Autowired
+    private UnitService unitService;
 
     @GetMapping
     public List<Property> getProperties() {

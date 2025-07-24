@@ -1,6 +1,8 @@
 package com.alliebooks.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -17,11 +19,8 @@ public class Property extends BaseModel {
     private String name;
 
     @OneToMany(mappedBy="property")
+    @JsonIgnoreProperties("property")
     private List<Unit> units;
-
-    @OneToMany(mappedBy="property")
-    @JsonIgnore
-    private List<RentPayment> rentPayments;
 
     @OneToMany(mappedBy="property")
     @JsonIgnore

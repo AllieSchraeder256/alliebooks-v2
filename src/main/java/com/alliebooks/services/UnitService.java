@@ -19,4 +19,8 @@ public class UnitService extends BaseCrudService<Unit> {
 	public UnitService(UnitRepo repository) {
 		super(repository);
 	}
+
+	public List<Unit> findByPropertyId(UUID propertyId) {
+		return unitRepo.findByPropertyId(propertyId);
+	}
 }

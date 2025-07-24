@@ -5,6 +5,7 @@ import com.alliebooks.repositories.LeaseRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -21,21 +22,12 @@ public class LeaseService extends BaseCrudService<Lease> {
 	}
 
 	public List<Lease> getCurrentLeases() {
-		return leaseRepo.findByLeaseStartDateIsNotNullAndLeaseEndDateIsNullAndDeletedFalse();
-	}
-	public List<Lease> getUnleasedTenants() {
-		return leaseRepo.findByLeaseStartDateIsNotNullAndLeaseEndDateIsNullAndDeletedFalse();
+		return leaseRepo.findByCurrentTrueAndDeletedFalse();
 	}
 
 	@Override
 	public Lease save(Lease lease) {
 		var createdLease = super.save(lease);
-
-		for (var tenant : lease.getTenants()) {
-			tenant.setLeaseId(createdLease.getId());
-			tenant.setLease(lease);
-			tenantService.save(tenant);
-		}
 		return createdLease;
 	}
 }

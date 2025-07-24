@@ -1,13 +1,17 @@
 package com.alliebooks.models;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.UUID;
+import java.util.List;
 
 @Entity
-@Table(name="rent_payments")
+@Table(name="tenants")
 @Getter
 @Setter
 public class Tenant extends BaseModel {
@@ -18,10 +22,7 @@ public class Tenant extends BaseModel {
 	@Column(name="last_name")
 	private String lastName;
 
-	@Column(name="lease_id")
-	private UUID leaseId;
-	
-	@ManyToOne
-	@JoinColumn(name="lease_id", insertable=false, updatable=false)
-	private Lease lease;
+	@OneToMany(mappedBy="tenant")
+	@JsonIgnoreProperties("tenant")
+	private List<TenantLease> tenantLeases;
 }
