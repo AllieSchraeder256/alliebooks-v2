@@ -15,7 +15,7 @@ const [allTenants, setAllTenants] = useState('');
     }, []);
 
     const loadLeases = async () => {
-        const leases = await (await fetch(`/tenants/current-leases`)).json();
+        const leases = await (await fetch(`/leases/current-leases`)).json();
         setLeases(leases);
     }
 
@@ -27,18 +27,18 @@ const [allTenants, setAllTenants] = useState('');
     return (
         <>
         <div className="float-right">
-            <Button color="success" tag={Link} to="/tenants/leases/new">Add</Button>
+            <Button color="success" tag={Link} to="/leases/new">Add</Button>
         </div>
         <h3>Leases</h3>
         { leases && leases.map && leases.map(lease => {
-            <LeaseCard lease={lease} />
+            return <LeaseCard lease={lease} />
         }) }
         <div className="float-right">
             <Button color="success" tag={Link} to="/tenants/new">Add</Button>
         </div>
         <h3>All Tenants</h3>
         { allTenants && allTenants.map && allTenants.map(tenant => {
-            <TenantCard tenant={tenant} />
+            return <TenantCard tenant={tenant} />
         }) }
         </>
     );

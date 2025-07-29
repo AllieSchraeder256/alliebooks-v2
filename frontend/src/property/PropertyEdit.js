@@ -4,7 +4,7 @@ import { Button, Form, FormGroup, Input, Label, ButtonGroup } from 'reactstrap';
 
 const emptyProperty = {
     name: '',
-    units: [{ name: '', currentRent: '' }]
+    units: [{ name: ''}]
 };
 
 const PropertyEdit = () => {
@@ -38,16 +38,11 @@ const PropertyEdit = () => {
         property[name] = value;
 
         const unitNameMatch = name.match(/^unitName(\d+)$/);
-        const unitRentMatch = name.match(/^unitRent(\d+)$/);
 
         if (unitNameMatch) {
             const idx = parseInt(unitNameMatch[1]);
-            property.units[idx] = property.units[idx] || { name: '', currentRent: '' };
+            property.units[idx] = property.units[idx] || { name: ''};
             property.units[idx].name = value;
-        } else if (unitRentMatch) {
-            const idx = parseInt(unitRentMatch[1]);
-            property.units[idx] = property.units[idx] || { name: '', currentRent: '' };
-            property.units[idx].currentRent = value;
         } else {
             property[name] = value;
         }
@@ -110,15 +105,6 @@ const PropertyEdit = () => {
                                 placeholder="Unit Name"
                                 onChange={handleChange}
                                 value={property.units[i]?.name || ''}
-                            />
-                            <Label for={`unitRent${i}`}>Unit {i + 1} Rent</Label>
-                            <Input
-                                type="number"
-                                name={`unitRent${i}`}
-                                id={`unitRent${i}`}
-                                placeholder="Rent"
-                                onChange={handleChange}
-                                value={property.units[i]?.currentRent || ''}
                             />
                         </FormGroup>
                     </div>

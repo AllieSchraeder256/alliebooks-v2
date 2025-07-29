@@ -8,7 +8,7 @@ export const AppNavbar = () => {
     return (
         <>
         <div>
-            <Navbar bg="dark">
+            <Navbar bg="dark" >
                 <Container fluid>
                     <Navbar.Brand href="/">Alliebooks</Navbar.Brand>
                     <Nav>

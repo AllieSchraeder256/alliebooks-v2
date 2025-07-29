@@ -38,21 +38,10 @@ const PropertyList = () => {
 
 
             <div className="unitDiv w-25">
-                <Table>
-                    <thead>
-                        <tr>
-                            <th>Unit</th>
-                            <th>Rent</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {property.units && property.units.map(unit => (
-                            <tr key={unit.id}>
-                                <td>{unit.name}</td><td>{unit.currentRent}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </Table>
+                Units
+                {property.units && property.units.map(unit => (
+                    <p>{unit.name}</p>
+                ))}
             </div>
             {/* TODO investment info will go here */}
         </div>

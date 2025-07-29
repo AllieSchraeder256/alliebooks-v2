@@ -38,15 +38,23 @@
 }
 
 .propertyDiv {
-    margin: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     padding: 10px;
     border: 1px solid black;
 }
 .unitDiv {
-    margin: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     padding: 10px;
     border: 1px solid black;
     min-width: 200px;
+}
+
+.card {
+    padding: 0px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .float-right {
@@ -58,4 +66,20 @@
 .navbar-brand {
     color: orange !important;
     font-size: 2.5em !important;
+}
+.accordion-button {
+  padding: .6em !important;
+  font-weight: bold !important;
+}
+
+.accordion-button:not(.collapsed) {
+  padding: .6em !important;
+}
+
+.accordion-body {
+  padding: 1em !important;
+}
+.overdue-balance{
+    color: red !important;
+    //float: right !important;
 }

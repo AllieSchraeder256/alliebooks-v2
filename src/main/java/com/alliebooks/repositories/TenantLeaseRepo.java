@@ -1,6 +1,7 @@
 package com.alliebooks.repositories;
 
-import com.alliebooks.models.Tenant;
+import com.alliebooks.models.Lease;
+import com.alliebooks.models.TenantLease;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,7 +9,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface TenantRepo extends JpaRepository<Tenant, UUID> {
-    List<Tenant> findByDeletedFalse();
-    boolean existsByIdAndDeletedFalse(UUID id);
+public interface TenantLeaseRepo extends JpaRepository<TenantLease, UUID> {
 }
+

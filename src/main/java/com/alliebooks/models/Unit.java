@@ -17,9 +17,6 @@ import java.util.UUID;
 public class Unit extends BaseModel {
     private String name;
 
-    @Column(name="current_rent")
-    private double currentRent;
-
     @Column(name="property_id", insertable=false, updatable=false)
     private UUID propertyId;
 

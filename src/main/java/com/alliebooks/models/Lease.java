@@ -17,13 +17,26 @@ import java.util.UUID;
 public class Lease extends BaseModel {
 	private double balance;
 
-	@Column(name="startDate")
+	@Column(name="start_date")
 	private Instant startDate;
 
-	@Column(name="endDate")
+	@Column(name="end_date")
 	private Instant endDate;
 
 	private boolean current;
+
+	private double rent;
+
+	private double deposit;
+
+	@Column(name="deposit_paid_date")
+	private Instant depositPaidDate;
+
+	@Column(name="deposit_returned")
+	private Double depositReturned;
+
+	@Column(name="deposit_return_date")
+	private Instant depositReturnDate;
 
 	@Column(name="unit_id")
 	private UUID unitId;

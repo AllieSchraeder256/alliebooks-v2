@@ -13,7 +13,7 @@ import java.util.UUID;
 @Setter
 public class TenantLease extends BaseModel {
 	@Column(name="tenant_id")
-	private UUID tenant_id;
+	private UUID tenantId;
 
 	@ManyToOne
 	@JoinColumn(name="tenant_id", insertable=false, updatable=false)
