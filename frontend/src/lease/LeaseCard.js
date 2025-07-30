@@ -46,7 +46,11 @@ const LeaseCard = (inLease) => {
         <>
         <div key={lease.id} className="card">
             <div class="card-body">
+                <div className="float-right">
+                    <Button color="success" size="sm" tag={Link} to={"/leases/" + lease.id} >Edit</Button>
+                </div>
                 <h5 class="card-title">{lease.unit.property.name} - {lease.unit.name}</h5>
+
                 <Accordion flush open={accordionOpen} toggle={toggle} style={{padding: '0px'}}>
                     <AccordionItem>
                         <AccordionHeader targetId="1">

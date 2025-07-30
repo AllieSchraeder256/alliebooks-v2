@@ -23,6 +23,21 @@ public class LeaseController {
         return leaseService.getCurrentLeases();
     }
 
+    @GetMapping("/old-leases")
+    public List<Lease> getOldLeases() {
+        return leaseService.getOldLeases();
+    }
+
+    @GetMapping("/{id}")
+    public Lease getById(@PathVariable UUID id) throws Exception {
+        var lease = leaseService.findById(id);
+        if (lease.isPresent()) {
+            return lease.get();
+        }else {
+            throw new Exception(String.format("Lease %s not found", id));
+        }
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Lease> update(@PathVariable UUID id, @RequestBody LeaseForm leaseForm) {
         var leaseOpt = leaseService.findById(id);

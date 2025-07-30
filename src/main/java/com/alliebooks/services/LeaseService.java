@@ -29,7 +29,11 @@ public class LeaseService extends BaseCrudService<Lease> {
 	}
 
 	public List<Lease> getCurrentLeases() {
-		return leaseRepo.findByCurrentTrueAndDeletedFalse();
+		return leaseRepo.findByCurrentAndDeletedFalse(true);
+	}
+
+	public List<Lease> getOldLeases() {
+		return leaseRepo.findByCurrentAndDeletedFalse(false);
 	}
 
 	public void saveTenantLeases(UUID leaseId, List<UUID> tenantIds) {

@@ -16,12 +16,15 @@ const emptyLease = {
     depositReturned: null,
     depositReturnDate: null,
     unitId: null,
+    propertyAndUnitName:'',
+    tenantNames: '',
     tenantIds: []
 };
 
 const LeaseEdit = () => {
     const id = useParams().id || 'new';
-    const [lease, setLease] = useState(emptyLease);
+    const [lease, setLease] = useState(emptyLease); //lease with partial data for API save
+    const [loadedLease, setLoadedLease] = useState(''); //lease from database with all data
     const [properties, setProperties] = useState([]);
     const [units, setUnits] = useState([]);
     const [tenants, setTenants] = useState([]);
@@ -31,9 +34,13 @@ const LeaseEdit = () => {
     const title = <h2>{lease.id ? 'Edit Lease' : 'Add Lease'}</h2>;
 
     useEffect(() => {
-        loadLease(id);
-        loadProperties();
-        loadTenants();
+        if (id === 'new') {
+            loadProperties();
+            loadTenants();
+            setLease(emptyLease);
+        } else {
+            loadLease(id);
+        }
     }, []);
 
     const loadTenants = async () => {
@@ -42,19 +49,34 @@ const LeaseEdit = () => {
     }
 
     const loadLease = async (id) => {
-        if (id !== 'new') {
-            const lease = await (await fetch(`/leases/${id}`)).json();
-            setLease(lease);
-        } else {
-            setLease(emptyLease);
-        }
+        const getLease = await (await fetch(`/leases/${id}`)).json();
+        setLoadedLease(getLease);
+        console.log('loading lease '+ loadedLease);
+
+        lease.rent = getLease.rent;
+        lease.startDate = getLease.startDate ? getLease.startDate.substring(0, 10) : null;
+        lease.endDate = getLease.endDate ? getLease.endDate.substring(0, 10) : null;
+        lease.balance = getLease.balance;
+        lease.current = getLease.current;
+        lease.deposit = getLease.deposit;
+        lease.depositPaidDate = getLease.depositPaidDate ? getLease.depositPaidDate.substring(0, 10) : null;
+        lease.depositReturned = getLease.depositReturned;
+        lease.depositReturnDate = getLease.depositReturnDate ? getLease.depositReturnDate.substring(0, 10) : null;
+        lease.unitId = getLease.unit.id;
+        lease.id = getLease.id;
+
+        setProperties(getLease.unit.property ? [getLease.unit.property] : []);
+        setUnits(getLease.unit.property && getLease.unit ? [getLease.unit] : []);
+
+        lease.tenantIds = getLease.tenantLeases.map(tenantLease => tenantLease.tenant.id);
+        setLease(lease);
     }
-    const loadProperties = async () => {
+    const loadProperties = async (id) => {
         const properties = await (await fetch(`/properties`)).json();
         setProperties(properties);
         if (properties.length > 0 && properties[0].units) {
             setUnits(properties[0].units);
-            console.log('setting units in LoadProperties' + properties[0].units[0].id);
+
             updateUnit(properties[0].units[0].id);
         }
     }
@@ -65,7 +87,6 @@ const LeaseEdit = () => {
     function setSelectedTenants(selectedOptions) {
         lease.tenantIds = selectedOptions.map(option => option.value);
         setLease({...lease});
-        console.log('setSelectedTenants', lease.tenants);
     }
 
     function handleChange(event) {
@@ -88,7 +109,7 @@ const LeaseEdit = () => {
     }
 
     function toggleIsCurrent(event) {
-        const value = event.target.value;
+        const value = event.target.checked;
         lease.current = value;
         setLease({...lease});
     }
@@ -109,7 +130,6 @@ const LeaseEdit = () => {
 
     function updateUnit(unitId) {
         lease.unitId = unitId;
-        console.log('setting unit id ' + unitId)
         setLease({...lease});
     }
 
@@ -124,51 +144,76 @@ const LeaseEdit = () => {
         });
     }
 
-
     return (
         <>
         <div>
             <Container breakpoint="md">
                 {title}
                 <Form onSubmit={handleSubmit}>
-                    <FormGroup>
-                        <Label for="tenants">Tenants</Label>
-                        <Select
-                            options={tenantOptions}
-                            components={animatedComponents}
-                            onChange={choice => setSelectedTenants(choice)}
-                            isMulti/ >
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="current">Lease is Current</Label>
-                        <Input type="checkbox" name="current" id="current" checked={lease.current} onChange={toggleIsCurrent} />
-                    </FormGroup>
-                    <Row>
-                        <Col md={6}>
+
+                    { id === 'new' ? (
+                        <>
+                        <Row>
                             <FormGroup>
-                                <Label for="selectedProperty">Property</Label>
-                                <select id="selectedProperty" onChange={handlePropertyChange}>
-                                    {properties.map((property) => (
-                                      <option key={property.id} value={property.id}>
-                                        {property.name}
-                                      </option>
-                                    ))}
-                                </select>
+                                <Label for="tenants">Tenants</Label>
+                                <Select
+                                    id = "tenantSelect"
+                                    options={tenantOptions}
+                                    components={animatedComponents}
+                                    onChange={choice => setSelectedTenants(choice)}
+                                    isMulti />
                             </FormGroup>
-                        </Col>
-                        <Col md={6}>
-                            <FormGroup>
-                                <Label for="selectedUnit">Unit</Label>
-                                <select id="selectedUnit" value={lease.unitId || ''} onChange={handleUnitChange}>
-                                    {units.map((unit) => (
-                                      <option key={unit.id} value={unit.id}>
-                                        {unit.name}
-                                      </option>
-                                    ))}
-                                </select>
-                            </FormGroup>
-                        </Col>
-                    </Row>
+                        </Row>
+                        <Row>
+                            <Col md={6}>
+                                <FormGroup>
+                                    <Label for="selectedProperty">Property</Label>
+                                    <select id="selectedProperty" onChange={handlePropertyChange}>
+                                        {properties.map((property) => (
+                                          <option key={property.id} value={property.id}>
+                                            {property.name}
+                                          </option>
+                                        ))}
+                                    </select>
+                                </FormGroup>
+                            </Col>
+                            <Col md={6}>
+                                <FormGroup>
+                                    <Label for="selectedUnit">Unit</Label>
+                                    <select id="selectedUnit" value={lease.unitId || ''} onChange={handleUnitChange}>
+                                        {units.map((unit) => (
+                                          <option key={unit.id} value={unit.id}>
+                                            {unit.name}
+                                          </option>
+                                        ))}
+                                    </select>
+                                </FormGroup>
+                            </Col>
+                        </Row>
+                        </>
+                    ):(
+                        <>
+                        <Row>
+                            <Col md={4}>
+                                <h5>{loadedLease.unit && loadedLease.unit.property.name} - {loadedLease.unit && loadedLease.unit.name}</h5>
+                            </Col>
+                            <Col md={5}>
+                                {loadedLease && loadedLease.tenantLeases && loadedLease.tenantLeases.map(tenantLease => {
+                                    return <span key={tenantLease.id}>
+                                        {tenantLease.tenant.firstName} {tenantLease.tenant.lastName}
+                                        {loadedLease.tenantLeases && loadedLease.tenantLeases.indexOf(tenantLease) < loadedLease.tenantLeases.length - 1 ? ', ' : ''}
+                                    </span>})}
+                            </Col>
+                            <Col md={3}>
+                                <FormGroup>
+                                    <Label for="current">Lease is Current</Label>
+                                    <Input type="checkbox" name="current" id="current" checked={lease.current} onChange={toggleIsCurrent} />
+                                </FormGroup>
+                            </Col>
+                        </Row>
+                        </>
+                    )}
+
                     <Row>
                         <Col md={6}>
                             <FormGroup>
@@ -229,7 +274,7 @@ const LeaseEdit = () => {
                     }
                     <FormGroup>
                         <Button color="primary" type="submit">Save</Button>{' '}
-                        <Button color="secondary" tag={Link} to="/leases">Cancel</Button>
+                        <Button color="secondary" tag={Link} to="/">Cancel</Button>
                     </FormGroup>
                 </Form>
             </Container>

@@ -7,8 +7,9 @@ import ExpenseTypeList from './ExpenseTypeList';
 import ExpenseTypeEdit from "./ExpenseTypeEdit";
 import PropertyList from './property/PropertyList';
 import PropertyEdit from "./property/PropertyEdit";
-import LeaseHome from "./tenant/LeaseHome";
-import LeaseEdit from "./tenant/LeaseEdit";
+import LeaseHome from "./lease/LeaseHome";
+import LeaseEdit from "./lease/LeaseEdit";
+import TenantList from "./tenant/TenantList";
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
                         <Route path='/properties' exact={true} element={<PropertyList />}/>
                         <Route path='/properties/:id' element={<PropertyEdit />}/>
                         <Route path='/leases/:id' element={<LeaseEdit />}/>
+                        <Route path='/tenants' exact={true} element={<TenantList />}/>
                     </Route>
                 </Routes>
             </BrowserRouter>

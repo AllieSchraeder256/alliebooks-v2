@@ -2,26 +2,24 @@ import React, { useEffect, useState } from 'react';
 import { Button, ButtonGroup, Table } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import LeaseCard from './LeaseCard';
-import TenantCard from './TenantCard';
 
-const TenantHome = () => {
+const LeaseHome = () => {
 
 const [leases, setLeases] = useState('');
-const [allTenants, setAllTenants] = useState('');
+const [oldLeases, setOldLeases] = useState('');
 
     useEffect(() => {
         loadLeases();
-        loadTenants();
+        loadOldLeases();
     }, []);
 
     const loadLeases = async () => {
         const leases = await (await fetch(`/leases/current-leases`)).json();
         setLeases(leases);
     }
-
-    const loadTenants = async () => {
-        const tenants = await (await fetch(`/tenants`)).json();
-        setAllTenants(tenants);
+    const loadOldLeases = async () => {
+        const oldLeases = await (await fetch(`/leases/old-leases`)).json();
+        setOldLeases(oldLeases);
     }
 
     return (
@@ -29,19 +27,17 @@ const [allTenants, setAllTenants] = useState('');
         <div className="float-right">
             <Button color="success" tag={Link} to="/leases/new">Add</Button>
         </div>
-        <h3>Leases</h3>
+        <h3>Current Leases</h3>
         { leases && leases.map && leases.map(lease => {
             return <LeaseCard lease={lease} />
         }) }
-        <div className="float-right">
-            <Button color="success" tag={Link} to="/tenants/new">Add</Button>
-        </div>
-        <h3>All Tenants</h3>
-        { allTenants && allTenants.map && allTenants.map(tenant => {
-            return <TenantCard tenant={tenant} />
+
+        <h3>Old Leases</h3>
+        { oldLeases && oldLeases.map && oldLeases.map(oldLease => {
+            return <LeaseCard lease={oldLease} />
         }) }
         </>
     );
 }
 
-export default TenantHome;
+export default LeaseHome;

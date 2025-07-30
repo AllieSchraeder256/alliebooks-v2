@@ -9,6 +9,6 @@ import java.util.UUID;
 
 @Repository
 public interface LeaseRepo extends JpaRepository<Lease, UUID> {
-    List<Lease> findByCurrentTrueAndDeletedFalse();
+    List<Lease> findByCurrentAndDeletedFalse(boolean current);
 }
 
