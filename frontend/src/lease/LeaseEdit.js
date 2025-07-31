@@ -144,6 +144,18 @@ const LeaseEdit = () => {
         });
     }
 
+    async function remove(id) {
+        await fetch(`/leases/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }).then(() => {
+            navigate('/', { replace: true });//back home
+        });
+    }
+
     return (
         <>
         <div>
@@ -197,7 +209,7 @@ const LeaseEdit = () => {
                             <Col md={4}>
                                 <h5>{loadedLease.unit && loadedLease.unit.property.name} - {loadedLease.unit && loadedLease.unit.name}</h5>
                             </Col>
-                            <Col md={5}>
+                            <Col md={4}>
                                 {loadedLease && loadedLease.tenantLeases && loadedLease.tenantLeases.map(tenantLease => {
                                     return <span key={tenantLease.id}>
                                         {tenantLease.tenant.firstName} {tenantLease.tenant.lastName}
@@ -209,6 +221,9 @@ const LeaseEdit = () => {
                                     <Label for="current">Lease is Current</Label>
                                     <Input type="checkbox" name="current" id="current" checked={lease.current} onChange={toggleIsCurrent} />
                                 </FormGroup>
+                            </Col>
+                            <Col md={1}>
+                                <Button size="sm" color="danger" onClick={() => remove(lease.id)}>Delete</Button>
                             </Col>
                         </Row>
                         </>

@@ -1,5 +1,6 @@
 package com.alliebooks.controllers;
 
+import com.alliebooks.models.ExpenseType;
 import com.alliebooks.models.Lease;
 import com.alliebooks.models.forms.LeaseForm;
 import com.alliebooks.services.LeaseService;
@@ -59,4 +60,13 @@ public class LeaseController {
         return ResponseEntity.created(new URI("/leases/" + saved.getId())).body(saved);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Lease> delete(@PathVariable UUID id) {
+        try {
+            leaseService.delete(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

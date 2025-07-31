@@ -47,4 +47,10 @@ public class LeaseService extends BaseCrudService<Lease> {
 			//TODO logging if this fails
 		}
 	}
+
+	@Override
+	public Lease delete(UUID id) throws Exception {
+		tenantLeaseService.deleteByLeaseId(id);
+		return super.delete(id);
+	}
 }
