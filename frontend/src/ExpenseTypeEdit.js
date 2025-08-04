@@ -37,7 +37,6 @@ const ExpenseTypeEdit = () => {
     function handleSubmit(event) {
         event.preventDefault();
         saveExpenseType();
-        navigate('/expense-types', { replace: true });
     }
 
     async function saveExpenseType() {
@@ -48,6 +47,8 @@ const ExpenseTypeEdit = () => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(expenseType),
+        }).then(() => {
+            navigate('/expense-types', { replace: true });
         });
     }
 

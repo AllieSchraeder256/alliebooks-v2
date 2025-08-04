@@ -105,7 +105,6 @@ const LeaseEdit = () => {
     function handleSubmit(event) {
         event.preventDefault();
         saveLease();
-        navigate('/', { replace: true });//back home
     }
 
     function toggleIsCurrent(event) {
@@ -141,6 +140,8 @@ const LeaseEdit = () => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(lease),
+        }).then(() => {
+            navigate('/', { replace: true });
         });
     }
 

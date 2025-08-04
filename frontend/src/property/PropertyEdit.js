@@ -71,7 +71,6 @@ const PropertyEdit = () => {
     function handleSubmit(event) {
         event.preventDefault();
         saveProperty();
-        navigate('/properties', { replace: true });
     }
 
     async function saveProperty() {
@@ -82,6 +81,8 @@ const PropertyEdit = () => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(property),
+        }).then(() => {
+            navigate('/properties', { replace: true });
         });
     }
 

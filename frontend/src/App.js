@@ -10,6 +10,8 @@ import PropertyEdit from "./property/PropertyEdit";
 import LeaseHome from "./lease/LeaseHome";
 import LeaseEdit from "./lease/LeaseEdit";
 import TenantList from "./tenant/TenantList";
+import TenantDetails from "./tenant/TenantDetails";
+import TenantEdit from "./tenant/TenantEdit";
 
 
 function App() {
@@ -25,6 +27,8 @@ function App() {
                         <Route path='/properties/:id' element={<PropertyEdit />}/>
                         <Route path='/leases/:id' element={<LeaseEdit />}/>
                         <Route path='/tenants' exact={true} element={<TenantList />}/>
+                        <Route path='/tenants/:id' element={<TenantDetails />}/>
+                        <Route path='/tenants/edit/:id' element={<TenantEdit />}/>
                     </Route>
                 </Routes>
             </BrowserRouter>

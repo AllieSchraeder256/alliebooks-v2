@@ -52,4 +52,7 @@ public class Lease extends BaseModel {
 	@OneToMany(mappedBy="lease")
 	@JsonIgnoreProperties("lease")
 	private List<TenantLease> tenantLeases;
+
+	@OneToMany(mappedBy="lease")
+	private List<Note> notes;
 }
