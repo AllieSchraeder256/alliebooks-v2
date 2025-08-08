@@ -23,4 +23,14 @@ public class RentPaymentService extends BaseCrudService<RentPayment> {
 			repository.findByDueOnBetweenAndDeletedFalseOrderByDueOnDesc(start, end)
 			: repository.findByDueOnBetweenAndLeaseIdAndDeletedFalseOrderByDueOnDesc(start, end, leaseId);
 	}
+
+	public List<RentPayment> getRentPayments(UUID leaseId) {
+		return repository.findByLeaseIdAndDeletedFalseOrderByDueOnDesc(leaseId);
+	}
+
+	public LocalDate getNextPaymentDueOn(UUID leaseId) {
+		var lastPaymentOpt = repository.findFirstByLeaseIdAndDeletedFalseOrderByDueOnDesc(leaseId);
+        return lastPaymentOpt.map(rentPayment ->
+				rentPayment.getDueOn().plusMonths(1)).orElseGet(LocalDate::now);
+    }
 }

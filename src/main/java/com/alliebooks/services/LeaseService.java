@@ -24,12 +24,27 @@ public class LeaseService extends BaseCrudService<Lease> {
 	@Autowired
 	private TenantService tenantService;
 
+	@Autowired
+	private RentPaymentService rentPaymentService;
+
 	public LeaseService(LeaseRepo repository) {
 		super(repository);
 	}
 
 	public List<Lease> getCurrentLeases() {
-		return leaseRepo.findByCurrentAndDeletedFalse(true);
+		var leases = leaseRepo.findByCurrentAndDeletedFalse(true);
+		for(var lease : leases) {
+			lease.setNextPaymentDueOn(rentPaymentService.getNextPaymentDueOn(lease.getId()));
+		}
+		return leases;
+	}
+
+	@Override
+	public Optional<Lease> findById(UUID id) {
+		var leaseOpt = super.findById(id);
+        leaseOpt.ifPresent(lease ->
+				lease.setNextPaymentDueOn(rentPaymentService.getNextPaymentDueOn(lease.getId())));
+		return leaseOpt;
 	}
 
 	public List<CurrentLeaseSummary> getCurrentLeaseSummary() {

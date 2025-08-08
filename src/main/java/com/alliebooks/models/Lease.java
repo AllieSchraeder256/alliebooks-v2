@@ -38,6 +38,9 @@ public class Lease extends BaseModel {
 	@Column(name="deposit_return_date")
 	private LocalDate depositReturnDate;
 
+	@Transient
+	private LocalDate nextPaymentDueOn;
+
 	@Column(name="unit_id")
 	private UUID unitId;
 	

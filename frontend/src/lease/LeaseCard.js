@@ -11,9 +11,11 @@ import {
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import RentPaymentTable from '../rent-payment/RentPaymentTable';
 
 const LeaseCard = (inLease) => {
     const [lease, setLease] = useState(inLease.lease); //I don't know why this is necessary
+    const [rentPayments, setRentPayments] = useState([]);
     const [accordionOpen, setAccordionOpen] = useState('');
     const toggle = (id) => {
         if (accordionOpen === id) {
@@ -22,6 +24,15 @@ const LeaseCard = (inLease) => {
             setAccordionOpen(id);
         }
     };
+
+    useEffect(() => {
+        loadRentPayments(lease.id);
+    }, []);
+
+    const loadRentPayments = async (leaseId) => {
+        const payments = await (await fetch(`/rent-payments?leaseId=${leaseId}`)).json();
+        setRentPayments(payments);
+    }
 
     const tenantList = lease.tenantLeases && lease.tenantLeases.map(tenantLease => {
         return <span key={tenantLease.id}>
@@ -34,10 +45,23 @@ const LeaseCard = (inLease) => {
       return (
         <>
         <Container fluid className="ps-0 d-flex justify-content-between">
-            <span>Rent: ${lease.rent} - Tenants: {tenantList}</span>
-            { balance > 0 &&
+            <span>Rent: ${lease.rent}</span>
+            <span>Tenants: {tenantList}</span>
+            { balance > 0 ?
                 <span className="overdue-balance">OVERDUE BALANCE: ${lease.balance} </span>
+                : <span/>
             }
+        </Container>
+         </>);
+    }
+    function RentPaymentHeader({ nextPaymentDueOn }) {
+      return (
+        <>
+        <Container fluid className="ps-0 d-flex justify-content-between">
+            <span>Rent Payments</span>
+            <span className={moment(nextPaymentDueOn) < moment() ? "overdue-balance" : ""}>Payment Due: {nextPaymentDueOn ? moment(nextPaymentDueOn).format('MMM DD YYYY') : 'N/A'}</span>
+            <Button size="sm" color="primary" tag={Link} to={"/rent-payments/new?leaseId=" + lease.id}>New Payment</Button>
+
         </Container>
          </>);
     }
@@ -66,14 +90,10 @@ const LeaseCard = (inLease) => {
                     </AccordionItem>
                     <AccordionItem>
                         <AccordionHeader targetId="2">
-                            <Container fluid className="ps-0 d-flex justify-content-between">
-                                <span>Rent Payments</span>
-                                <Button size="sm" color="primary" tag={Link} to={"/rent-payments/" + lease.id}>New Payment</Button>
-                            </Container>
-
+                            <RentPaymentHeader nextPaymentDueOn = {lease.nextPaymentDueOn} />
                         </AccordionHeader>
                         <AccordionBody accordionId="2">
-                            <p>test</p>
+                            <RentPaymentTable rentPayments={rentPayments} />
                         </AccordionBody>
                     </AccordionItem>
                 </Accordion>

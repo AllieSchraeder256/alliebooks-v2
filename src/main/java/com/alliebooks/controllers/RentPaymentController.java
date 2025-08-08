@@ -1,7 +1,9 @@
 package com.alliebooks.controllers;
 
+import com.alliebooks.models.Lease;
 import com.alliebooks.models.RentPayment;
 import com.alliebooks.models.Tenant;
+import com.alliebooks.models.forms.LeaseForm;
 import com.alliebooks.services.LeaseService;
 import com.alliebooks.services.RentPaymentService;
 import com.alliebooks.services.TenantService;
@@ -28,9 +30,34 @@ public class RentPaymentController {
     public final DateTimeFormatter REQUEST_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @GetMapping
-    public List<RentPayment> getRentPayments(@RequestParam String start, @RequestParam String end, @RequestParam (required=false) UUID leaseId) {
-        var startDate = LocalDate.parse(start, REQUEST_DATE_FORMAT);
-        var endDate = LocalDate.parse(end, REQUEST_DATE_FORMAT);
-        return rentPaymentService.getRentPayments(startDate, endDate, leaseId);
+    public List<RentPayment> getRentPayments(@RequestParam(required=false) String start,
+                                             @RequestParam(required=false) String end,
+                                             @RequestParam (required=false) UUID leaseId) throws Exception {
+
+        if (start != null && end != null) {
+            var startDate = LocalDate.parse(start, REQUEST_DATE_FORMAT);
+            var endDate = LocalDate.parse(end, REQUEST_DATE_FORMAT);
+            return rentPaymentService.getRentPayments(startDate, endDate, leaseId);
+        } else if (leaseId != null) {
+            return rentPaymentService.getRentPayments(leaseId);
+        } else {
+            throw new Exception("Bad Request, missing parameters");
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<RentPayment> update(@PathVariable UUID id, @RequestBody RentPayment rentPayment) {
+        var paymentOpt = rentPaymentService.findById(id);
+
+        if (paymentOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(rentPaymentService.save(rentPayment));
+        }
+    }
+    @PostMapping
+    public ResponseEntity<RentPayment> create(@RequestBody RentPayment rentPayment) throws URISyntaxException {
+        var saved = rentPaymentService.save(rentPayment);
+        return ResponseEntity.created(new URI("/leases/" + saved.getId())).body(saved);
     }
 }
