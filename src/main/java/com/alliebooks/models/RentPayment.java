@@ -1,11 +1,13 @@
 package com.alliebooks.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -16,11 +18,11 @@ public class RentPayment extends BaseModel {
 	private double amount;
 	private String note;
 	
-	@Column(name="received_date")
-	private Instant receivedDate;
+	@Column(name="received_on")
+	private LocalDate receivedOn;
 
-	@Column(name="due_date")
-	private Instant dueDate;
+	@Column(name="due_on")
+	private LocalDate dueOn;
 
 	@Column(name="image_path")
 	private String imagePath;
@@ -30,5 +32,9 @@ public class RentPayment extends BaseModel {
 	
 	@ManyToOne
 	@JoinColumn(name="lease_id", insertable=false, updatable=false)
+	@JsonIgnoreProperties("tenantLeases")
 	private Lease lease;
+
+	@Transient
+	private String tenants;
 }

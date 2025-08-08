@@ -2,14 +2,14 @@ package com.alliebooks.services;
 
 import com.alliebooks.models.Lease;
 import com.alliebooks.models.TenantLease;
+import com.alliebooks.models.forms.CurrentLeaseSummary;
 import com.alliebooks.repositories.LeaseRepo;
 import com.alliebooks.repositories.TenantLeaseRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Logger;
 
 @Service
@@ -30,6 +30,33 @@ public class LeaseService extends BaseCrudService<Lease> {
 
 	public List<Lease> getCurrentLeases() {
 		return leaseRepo.findByCurrentAndDeletedFalse(true);
+	}
+
+	public List<CurrentLeaseSummary> getCurrentLeaseSummary() {
+		var list = new ArrayList<CurrentLeaseSummary>();
+		for (var lease : leaseRepo.findByCurrentAndDeletedFalse(true)) {
+			if (lease.getUnit() == null || lease.getUnit().getProperty() == null || lease.getTenantLeases() == null) {
+				//TODO log bad data in here
+				continue;
+			}
+
+			var tenants = "";
+			for (var tenantLease : lease.getTenantLeases()) {
+				//TODO more bad data
+				if (tenantLease.getTenant() != null) {
+					tenants += String.format("%s %s, ", tenantLease.getTenant().getFirstName(), tenantLease.getTenant().getLastName());
+				}
+			}
+			if (!tenants.isEmpty()) {
+				tenants = tenants.substring(0, tenants.lastIndexOf(", "));
+			}
+			list.add(new CurrentLeaseSummary(lease.getId(),
+					String.format("%s - %s - %s",
+						lease.getUnit().getProperty().getName(),
+						lease.getUnit().getName(),
+						tenants)));
+		}
+		return list;
 	}
 
 	public List<Lease> getOldLeases() {

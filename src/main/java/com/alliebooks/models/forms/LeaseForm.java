@@ -4,12 +4,14 @@ import com.alliebooks.models.Lease;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
 @Getter
 @Setter
-public class LeaseForm extends FormModelBase {
+public class LeaseForm implements Serializable {
 
 	private Double balance;
 
@@ -43,10 +45,10 @@ public class LeaseForm extends FormModelBase {
 			lease.setBalance(balance);
 		}
 		if (startDate != null) {
-			lease.setStartDate(parseDateNoTime(startDate));
+			lease.setStartDate(LocalDate.parse(startDate));
 		}
 		if (endDate != null) {
-			lease.setEndDate(parseDateNoTime(endDate));
+			lease.setEndDate(LocalDate.parse(endDate));
 		}
 		if (rent != null) {
 			lease.setRent(rent);
@@ -55,13 +57,13 @@ public class LeaseForm extends FormModelBase {
 			lease.setDeposit(deposit);
 		}
 		if (depositPaidDate != null) {
-			lease.setDepositPaidDate(parseDateNoTime(depositPaidDate));
+			lease.setDepositPaidDate(LocalDate.parse(depositPaidDate));
 		}
 		if (depositReturned != null) {
 			lease.setDepositReturned(depositReturned);
 		}
 		if (depositReturnDate != null) {
-			lease.setDepositReturnDate(parseDateNoTime(depositReturnDate));
+			lease.setDepositReturnDate(LocalDate.parse(depositReturnDate));
 		}
 		if (unitId != null) {
 			lease.setUnitId(unitId);

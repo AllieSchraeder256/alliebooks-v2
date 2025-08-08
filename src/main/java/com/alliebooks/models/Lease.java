@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,10 +18,10 @@ public class Lease extends BaseModel {
 	private double balance;
 
 	@Column(name="start_date")
-	private Instant startDate;
+	private LocalDate startDate;
 
 	@Column(name="end_date")
-	private Instant endDate;
+	private LocalDate endDate;
 
 	private boolean current;
 
@@ -30,13 +30,13 @@ public class Lease extends BaseModel {
 	private double deposit;
 
 	@Column(name="deposit_paid_date")
-	private Instant depositPaidDate;
+	private LocalDate depositPaidDate;
 
 	@Column(name="deposit_returned")
 	private Double depositReturned;
 
 	@Column(name="deposit_return_date")
-	private Instant depositReturnDate;
+	private LocalDate depositReturnDate;
 
 	@Column(name="unit_id")
 	private UUID unitId;

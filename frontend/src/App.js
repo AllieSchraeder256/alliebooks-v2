@@ -12,6 +12,7 @@ import LeaseEdit from "./lease/LeaseEdit";
 import TenantList from "./tenant/TenantList";
 import TenantDetails from "./tenant/TenantDetails";
 import TenantEdit from "./tenant/TenantEdit";
+import RentPaymentHome from "./rent-payment/RentPaymentHome";
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
                         <Route path='/tenants' exact={true} element={<TenantList />}/>
                         <Route path='/tenants/:id' element={<TenantDetails />}/>
                         <Route path='/tenants/edit/:id' element={<TenantEdit />}/>
+                        <Route path='/rent-payments' exact={true} element={<RentPaymentHome />}/>
                     </Route>
                 </Routes>
             </BrowserRouter>

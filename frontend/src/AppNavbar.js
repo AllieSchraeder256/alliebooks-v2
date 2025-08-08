@@ -14,6 +14,7 @@ export const AppNavbar = () => {
                     <Nav>
                         <Nav.Link href="/properties">Properties</Nav.Link>
                         <Nav.Link href="/tenants">Tenants</Nav.Link>
+                        <Nav.Link href="/rent-payments">Rent Payments</Nav.Link>
                         <Nav.Link href="/expense-types">Expense Types</Nav.Link>
                     </Nav>
                 </Container>

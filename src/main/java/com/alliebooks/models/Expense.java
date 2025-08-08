@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -17,7 +18,7 @@ public class Expense extends BaseModel {
 	private String merchant;
 
 	@Column(name="paid_on")
-	private Instant paidOn;
+	private LocalDate paidOn;
 
 	@Column(name="image_path")
 	private String imagePath;
