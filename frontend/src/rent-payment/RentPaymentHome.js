@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, ButtonGroup, Table, Input, Label, Row, Col, FormGroup } from 'reactstrap';
+import { Button, ButtonGroup, Table, Input, Label, Row, Col, FormGroup, Checkbox, UncontrolledTooltip, FormFeedback } from 'reactstrap';
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
 import { Link } from 'react-router-dom';
@@ -18,6 +18,7 @@ const RentPaymentHome = () => {
     }
 
     const [rentPayments, setRentPayments] = useState('');
+    const [searchTypeAdvanced, setSearchTypeAdvanced] = useState(false);
     const [currentLeaseSummary, setCurrentLeaseSummary] = useState([]);
     const [filters, setFilters] = useState(defaultFilters);
 
@@ -34,21 +35,34 @@ const RentPaymentHome = () => {
     function handleFilterChange(event) {
         const { name, value } = event.target;
         filters[name] = value;
-        setFilters(filters);
+        setFilters({ ...filters});
         loadRentPayments(filters);
     }
     function setSelectedLease(choice) {
         filters.leaseId = choice ? choice.value : '';
-        setFilters(filters);
+        setFilters({ ...filters});
+        loadRentPayments(filters);
+    }
+    function handleSearchTypeSwitch(event) {
+        const checked = event.target.checked;
+        setSearchTypeAdvanced(checked);
+    }
+
+    function handleBasicSearchMonthChange(monthDelta) {
+        filters.startDate = moment(filters.startDate).add(monthDelta, 'month').startOf('month').format('yyyy-MM-DD');
+        filters.endDate = moment(filters.startDate).add(1, 'month').subtract(1, 'day').format('yyyy-MM-DD');
+        setFilters({ ...filters });
         loadRentPayments(filters);
     }
 
     const loadRentPayments = async (filters) => {
-        const url = filters.leaseId == '' ?
-            `/rent-payments?start=${filters.startDate}&end=${filters.endDate}`
-            : `/rent-payments?start=${filters.startDate}&end=${filters.endDate}&leaseId=${filters.leaseId}`;
-        const rentPayments = await (await fetch(url)).json();
-        setRentPayments(rentPayments);
+        if (filters.startDate && filters.endDate) {
+            const url = filters.leaseId == '' ?
+                `/rent-payments?start=${filters.startDate}&end=${filters.endDate}`
+                : `/rent-payments?start=${filters.startDate}&end=${filters.endDate}&leaseId=${filters.leaseId}`;
+            const rentPayments = await (await fetch(url)).json();
+            setRentPayments(rentPayments);
+        }
     }
 
     const loadCurrentLeaseSummary = async () => {
@@ -58,33 +72,43 @@ const RentPaymentHome = () => {
 
     const detailedFilterDiv = (
         <>
-            <div>
-                <Row className="row-cols-sm-auto g-3 align-items-center">
-                    <Col>
-                        Date Range
-                    </Col>
-                    <Col>
-                        <Input type="date" name="startDate" id="startDate" value={filters.startDate || ''} onChange={handleFilterChange} />
-                    </Col>
-                    <Col>
-                        to
-                    </Col>
-                    <Col>
-                        <Input type="date" name="endDate" id="endDate" value={filters.endDate || ''} onChange={handleFilterChange} className="py0" />
-                    </Col>
-                    <Col style={{minWidth: '300px', maxWidth: '450px'}}>
-                        <Select
-                            id = "filterLeaseSelect"
-                            options={currentLeaseOptions}
-                            components={animatedComponents}
-                            onChange={choice => setSelectedLease(choice)}
-                            placeholder="Lease"
-                            backspaceRemovesValue
-                            isClearable />
-                    </Col>
+            <Row className="row-cols-sm-auto align-items-center">
+                <Col>
+                    <Input type="date" name="startDate" id="startDate" invalid={!filters.startDate} value={filters.startDate || ''} onChange={handleFilterChange} />
+                </Col>
+                <Col>
+                    to
+                </Col>
+                <Col>
+                    <Input type="date" name="endDate" id="endDate" invalid={!filters.endDate} value={filters.endDate || ''} onChange={handleFilterChange} className="py0" />
+                </Col>
+                <Col style={{minWidth: '300px', maxWidth: '450px'}}>
+                    <Select
+                        id = "filterLeaseSelect"
+                        options={currentLeaseOptions}
+                        components={animatedComponents}
+                        onChange={choice => setSelectedLease(choice)}
+                        placeholder="Lease"
+                        backspaceRemovesValue
+                        isClearable />
+                </Col>
+            </Row>
+        </>
+    );
 
-                </Row>
-            </div>
+    const basicFilterDiv = (
+        <>
+            <Row className="row-cols-sm-auto align-items-center">
+                <Col>
+                    <Button color="primary" outline onClick={() => handleBasicSearchMonthChange(-1)} >←</Button>
+                </Col>
+                <Col>
+                    <span>{moment(filters.startDate).format('MMMM YYYY')}</span>
+                </Col>
+                <Col>
+                    <Button color="primary" outline onClick={() => handleBasicSearchMonthChange(1)} >→</Button>
+                </Col>
+            </Row>
         </>
     );
 
@@ -93,8 +117,16 @@ const RentPaymentHome = () => {
         <div className="float-right">
             <Button color="success" tag={Link} to="/rent-payments/new">Add</Button>
         </div>
-        <h3>Rent Payments</h3>
-        {detailedFilterDiv}
+        <Row className = "row-cols-sm-auto align-items-center">
+            <h3>Rent Payments</h3>
+            <FormGroup switch>
+                <Input type="switch" role="switch" id="searchTypeSelect" onChange={handleSearchTypeSwitch} />
+                <UncontrolledTooltip target="searchTypeSelect">
+                    Advanced Search
+                </UncontrolledTooltip>
+            </FormGroup>
+        </Row>
+        { searchTypeAdvanced ? detailedFilterDiv : basicFilterDiv }
         <RentPaymentTable rentPayments={rentPayments} />
         </>
     );

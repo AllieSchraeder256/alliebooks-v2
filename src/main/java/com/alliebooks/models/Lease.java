@@ -58,4 +58,22 @@ public class Lease extends BaseModel {
 
 	@OneToMany(mappedBy="lease")
 	private List<Note> notes;
+
+	@Transient
+	private String tenantList;
+
+	public String getTenantList() {
+		String tenants = "";
+		if (getTenantLeases() != null) {
+			for (var tenantLease : getTenantLeases()) {
+				if (tenantLease.getTenant() != null) {
+					tenants += String.format("%s %s, ", tenantLease.getTenant().getFirstName(), tenantLease.getTenant().getLastName());
+				}
+			}
+			if (!tenants.isEmpty()) {
+				tenants = tenants.substring(0, tenants.lastIndexOf(", "));
+			}
+		}
+		return tenants;
+	}
 }

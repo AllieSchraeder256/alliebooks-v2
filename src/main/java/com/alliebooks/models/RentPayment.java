@@ -1,12 +1,10 @@
 package com.alliebooks.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -34,7 +32,4 @@ public class RentPayment extends BaseModel {
 	@JoinColumn(name="lease_id", insertable=false, updatable=false)
 	@JsonIgnoreProperties("tenantLeases")
 	private Lease lease;
-
-	@Transient
-	private String tenants;
 }

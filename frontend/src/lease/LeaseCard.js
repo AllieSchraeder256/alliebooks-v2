@@ -13,8 +13,7 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import RentPaymentTable from '../rent-payment/RentPaymentTable';
 
-const LeaseCard = (inLease) => {
-    const [lease, setLease] = useState(inLease.lease); //I don't know why this is necessary
+const LeaseCard = ({lease}) => {
     const [rentPayments, setRentPayments] = useState([]);
     const [accordionOpen, setAccordionOpen] = useState('');
     const toggle = (id) => {
@@ -34,19 +33,12 @@ const LeaseCard = (inLease) => {
         setRentPayments(payments);
     }
 
-    const tenantList = lease.tenantLeases && lease.tenantLeases.map(tenantLease => {
-        return <span key={tenantLease.id}>
-            {tenantLease.tenant.firstName} {tenantLease.tenant.lastName}
-            {lease.tenantLeases && lease.tenantLeases.indexOf(tenantLease) < lease.tenantLeases.length - 1 ? ', ' : ''}
-        </span>
-    });
-
     function LeaseInfoHeader({ balance, rent }) {
       return (
         <>
         <Container fluid className="ps-0 d-flex justify-content-between">
             <span>Rent: ${lease.rent}</span>
-            <span>Tenants: {tenantList}</span>
+            <span>Tenants: {lease.tenantList}</span>
             { balance > 0 ?
                 <span className="overdue-balance">OVERDUE BALANCE: ${lease.balance} </span>
                 : <span/>
@@ -71,7 +63,7 @@ const LeaseCard = (inLease) => {
         <div key={lease.id} className="card">
             <div class="card-body">
                 <div className="float-right">
-                    <Button color="success" size="sm" tag={Link} to={"/leases/" + lease.id} >Edit</Button>
+                    <Button outline color="success" size="sm" tag={Link} to={"/leases/" + lease.id} >Edit</Button>
                 </div>
                 <h5 class="card-title">{lease.unit.property.name} - {lease.unit.name}</h5>
 
@@ -93,7 +85,9 @@ const LeaseCard = (inLease) => {
                             <RentPaymentHeader nextPaymentDueOn = {lease.nextPaymentDueOn} />
                         </AccordionHeader>
                         <AccordionBody accordionId="2">
-                            <RentPaymentTable rentPayments={rentPayments} />
+                            <RentPaymentTable
+                                rentPayments={rentPayments}
+                                hideColumns = {['tenantName', 'property']}/>
                         </AccordionBody>
                     </AccordionItem>
                 </Accordion>

@@ -55,21 +55,11 @@ public class LeaseService extends BaseCrudService<Lease> {
 				continue;
 			}
 
-			var tenants = "";
-			for (var tenantLease : lease.getTenantLeases()) {
-				//TODO more bad data
-				if (tenantLease.getTenant() != null) {
-					tenants += String.format("%s %s, ", tenantLease.getTenant().getFirstName(), tenantLease.getTenant().getLastName());
-				}
-			}
-			if (!tenants.isEmpty()) {
-				tenants = tenants.substring(0, tenants.lastIndexOf(", "));
-			}
 			list.add(new CurrentLeaseSummary(lease.getId(),
 					String.format("%s - %s - %s",
 						lease.getUnit().getProperty().getName(),
 						lease.getUnit().getName(),
-						tenants)));
+						lease.getTenantList())));
 		}
 		return list;
 	}

@@ -1,6 +1,5 @@
 package com.alliebooks.controllers;
 
-import com.alliebooks.models.ExpenseType;
 import com.alliebooks.models.Lease;
 import com.alliebooks.models.forms.CurrentLeaseSummary;
 import com.alliebooks.models.forms.LeaseForm;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @RestController

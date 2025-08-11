@@ -35,7 +35,7 @@ const [tenants, setTenants] = useState('');
             <td style={{whiteSpace: 'nowrap'}}>{tenant.hasCurrentLease ? "Yes" : "No"}</td>
             <td style={{whiteSpace: 'nowrap'}}>{tenant.tenantLeases.length}</td>
             <td>
-                <Button size="sm" color="primary" tag={Link} to={"/tenants/" + tenant.id}>Go</Button>
+                <Button size="sm" style={{paddingTop: '0px'}} color="link" tag={Link} to={"/tenants/" + tenant.id}>Details</Button>
             </td>
         </tr>
     });
