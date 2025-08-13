@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, ButtonGroup, Table } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import LeaseCard from '../lease/LeaseCard';
+import ImageModal from '../components/ImageModal';
 
 const RentPaymentTable = ({rentPayments, hideColumns}) => {
 
@@ -13,6 +14,7 @@ const RentPaymentTable = ({rentPayments, hideColumns}) => {
             <td>{payment.receivedOn}</td>
             <td>{payment.dueOn}</td>
             <td>{payment.note}</td>
+            <td>{payment.hasImage ? <ImageModal resourceId={payment.id}/> : '' }</td>
             { hideColumns && hideColumns.includes('edit') ? '' :
                 <td>
                     <Button size="sm" style={{paddingTop: '0px'}} color="link" tag={Link} to={"/rent-payments/" + payment.id}>Edit</Button>
@@ -32,12 +34,11 @@ const RentPaymentTable = ({rentPayments, hideColumns}) => {
                     <th>Received On</th>
                     <th>Due On</th>
                     <th>Notes</th>
+                    <th>Image</th>
                     { hideColumns && hideColumns.includes('edit') ? '' : <th>Edit</th> }
                 </tr>
             </thead>
-            <tbody>
-                {rentPaymentList}
-            </tbody>
+            <tbody>{rentPaymentList}</tbody>
         </Table>
         </>
     );

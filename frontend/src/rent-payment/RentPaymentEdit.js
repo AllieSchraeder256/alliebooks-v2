@@ -17,9 +17,11 @@ const RentPaymentEdit = () => {
     const id = useParams().id || 'new';
     const [searchParams, setSearchParams] = useSearchParams();
     const [rentPayment, setRentPayment] = useState(emptyPayment);
-    const [lease, setLease] = useState('');
+    const [lease, setLease] = useState(null);
+    const [updatedImageFile, setUpdatedImageFile] = useState(null);
+    const [image, setImage] = useState(null);
     const [currentLeaseSummary, setCurrentLeaseSummary] = useState([]);
-
+//todo make current lease summary a parameter
     const animatedComponents = makeAnimated();
     const navigate = useNavigate();
 
@@ -27,27 +29,32 @@ const RentPaymentEdit = () => {
     const title = <h2>{id != 'new' ? 'Edit Rent Payment' : 'Add Rent Payment'}</h2>;
 
     useEffect(() => {
-        if (id === 'new') {
-            setRentPayment(emptyPayment);
-            console.log(rentPayment);
-        } else {
+    console.log('useEffect called with id:', id);
+        if (id != 'new') {
             loadRentPayment(id);
+            loadImage(id);
         }
         if (leaseId) {
             loadLease(leaseId);
         }
-        loadCurrentLeaseSummary();
+        if (currentLeaseSummary.length === 0) {
+            loadCurrentLeaseSummary();
+        }
     }, []);
 
     const loadRentPayment = async (id) => {
-        const payment = await (await fetch(`/rent-payments/${id}`)).json();
-        setRentPayment(payment);
+        const rentPayment = await (await fetch(`/rent-payments/${id}`)).json();
+        setRentPayment(rentPayment);
+    }
+    const loadImage = async (id) => {
+        const imageData = await (await fetch(`/images?resourceId=${id}`)).json();
+        setImage(imageData);
+
     }
 
     const loadLease = async (id) => {
         const lease = await (await fetch(`/leases/${id}`)).json();
         setLease(lease);
-
         rentPayment.leaseId = lease.id;
         rentPayment.amount = lease.rent;
         rentPayment.dueOn = lease.nextPaymentDueOn;
@@ -69,30 +76,35 @@ const RentPaymentEdit = () => {
     }
 
     function handleChange(event) {
+    console.log('Input changed:', event.target.name, event.target.value);
         const { name, value } = event.target;
         rentPayment[name] = value;
         setRentPayment({...rentPayment});
+    }
+
+    function handleFileChange(event) {
+        setImage(null);
+        setUpdatedImageFile(event.target.files[0]);
     }
 
     function setSelectedLease(choice) {
         rentPayment.leaseId = choice ? choice.value : '';
         if (rentPayment.leaseId) {
             loadLease(rentPayment.leaseId);
-            rentPayment.amount = lease.rent;
         }
         setRentPayment({...rentPayment});
     }
 
     async function saveRentPayment() {
+        const formData = new FormData();
+        formData.append("rentPayment", new Blob([JSON.stringify(rentPayment)], { type: "application/json" }));
+        formData.append("imageFile", updatedImageFile);
+
         await fetch('/rent-payments' + (rentPayment.id ? '/' + rentPayment.id : ''), {
             method: (rentPayment.id) ? 'PUT' : 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(rentPayment),
+            body: formData,
         }).then(() => {
-            navigate('/rent-payments', { replace: true });//TODO redirect to month that the payment was due on
+            navigate(`/rent-payments?startDate=${encodeURIComponent(rentPayment.dueOn)}`, { replace: true });//TODO redirect to month that the payment was due on
         });
     }
 
@@ -160,10 +172,26 @@ const RentPaymentEdit = () => {
                             </FormGroup>
                         </Col>
                     </Row>
+                    <Row>
+                        <Col>
+                            <FormGroup>
+                                <Label for="imagePath">File</Label>
+                                <Input
+                                    id="imagePath"
+                                    name="imagePath"
+                                    type="file"
+                                    onChange={handleFileChange} />
+                            </FormGroup>
+                        </Col>
+                    </Row>
                     <FormGroup>
                         <Button color="primary" type="submit">Save</Button>{' '}
                         <Button color="secondary" tag={Link} to="/">Cancel</Button>
                     </FormGroup>
+                    <Row>
+                        {updatedImageFile && <img src={URL.createObjectURL(updatedImageFile)} alt="Image preview" />}
+                        {image && <img src={`data:image/jpeg;base64,${image.data}`} alt="Image preview" />}
+                    </Row>
                 </Form>
             </Container>
         </div>

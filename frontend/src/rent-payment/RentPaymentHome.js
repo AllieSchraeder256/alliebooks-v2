@@ -2,14 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { Button, ButtonGroup, Table, Input, Label, Row, Col, FormGroup, Checkbox, UncontrolledTooltip, FormFeedback } from 'reactstrap';
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import LeaseCard from '../lease/LeaseCard';
 import RentPaymentTable from './RentPaymentTable';
 import moment from 'moment';
 
 const RentPaymentHome = () => {
     const animatedComponents = makeAnimated();
-    const currentMonthStart = moment().format('yyyy-MM') + '-01';
+    const [searchParams] = useSearchParams();
+    const urlStartDate = searchParams.get('startDate');
+    const currentMonthStart = urlStartDate || moment().format('yyyy-MM') + '-01';
 
     const defaultFilters = {
         startDate : currentMonthStart,

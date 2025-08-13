@@ -7,8 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 public class BaseCrudService<T extends BaseModel> {
+    private static final Logger logger = Logger.getLogger(BaseCrudService.class.getName());
     private final JpaRepository<T, UUID> repository;
 
     public BaseCrudService(JpaRepository<T, UUID> repository) {
@@ -23,7 +25,9 @@ public class BaseCrudService<T extends BaseModel> {
 		}
         entity.setUpdatedAt(now);
 
-		return repository.save(entity);
+		var saved = repository.save(entity);
+        logger.info(String.format("Saved resource %s id=%s", saved.getClass(), saved.getId()));
+        return saved;
     }
 
     public Optional<T> findById(UUID id) {
@@ -34,7 +38,9 @@ public class BaseCrudService<T extends BaseModel> {
         entity.setDeletedAt(Instant.now());
         entity.setDeleted(true);
 
-        return repository.save(entity);
+        var deleted = repository.save(entity);
+        logger.info(String.format("Deleted resource %s id=%s", deleted.getClass(), deleted.getId()));
+        return deleted;
     }
 
     public T delete(UUID id) throws Exception {

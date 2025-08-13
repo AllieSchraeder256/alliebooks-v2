@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -25,6 +26,9 @@ public class RentPayment extends BaseModel {
 	@Column(name="image_path")
 	private String imagePath;
 
+	@Transient
+	private boolean hasImage;
+
 	@Column(name="lease_id")
 	private UUID leaseId;
 	
@@ -32,4 +36,5 @@ public class RentPayment extends BaseModel {
 	@JoinColumn(name="lease_id", insertable=false, updatable=false)
 	@JsonIgnoreProperties("tenantLeases")
 	private Lease lease;
+
 }

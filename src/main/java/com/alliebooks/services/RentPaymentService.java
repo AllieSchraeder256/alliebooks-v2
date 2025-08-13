@@ -12,20 +12,31 @@ import java.util.UUID;
 public class RentPaymentService extends BaseCrudService<RentPayment> {
 
 	private final RentPaymentRepo repository;
+	private final ImageService imageService;
 
-	public RentPaymentService(RentPaymentRepo repository) {
+	public RentPaymentService(RentPaymentRepo repository, ImageService imageService) {
 		super(repository);
 		this.repository = repository;
-	}
+        this.imageService = imageService;
+    }
 
 	public List<RentPayment> getRentPayments(LocalDate start, LocalDate end, UUID leaseId) {
-		return leaseId == null ?
+		var payments = leaseId == null ?
 			repository.findByDueOnBetweenAndDeletedFalseOrderByDueOnDesc(start, end)
 			: repository.findByDueOnBetweenAndLeaseIdAndDeletedFalseOrderByDueOnDesc(start, end, leaseId);
+
+		for (var payment : payments) {
+			payment.setHasImage(imageService.hasImage(payment.getId()));
+		}
+		return payments;
 	}
 
 	public List<RentPayment> getRentPayments(UUID leaseId) {
-		return repository.findByLeaseIdAndDeletedFalseOrderByDueOnDesc(leaseId);
+		var payments = repository.findByLeaseIdAndDeletedFalseOrderByDueOnDesc(leaseId);
+		for (var payment : payments) {
+			payment.setHasImage(imageService.hasImage(payment.getId()));
+		}
+		return payments;
 	}
 
 	public LocalDate getNextPaymentDueOn(UUID leaseId) {

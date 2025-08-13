@@ -1,12 +1,16 @@
 package com.alliebooks.controllers;
 
+import com.alliebooks.models.Image;
 import com.alliebooks.models.RentPayment;
 import com.alliebooks.models.Tenant;
+import com.alliebooks.services.ImageService;
 import com.alliebooks.services.RentPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
@@ -19,6 +23,8 @@ import java.util.UUID;
 public class RentPaymentController {
     @Autowired
     private RentPaymentService rentPaymentService;
+    @Autowired
+    private ImageService imageService;
 
     public final DateTimeFormatter REQUEST_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -49,18 +55,30 @@ public class RentPaymentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RentPayment> update(@PathVariable UUID id, @RequestBody RentPayment rentPayment) {
+    public ResponseEntity<RentPayment> update(
+              @PathVariable UUID id,
+              @RequestPart RentPayment rentPayment,
+              @RequestPart(required = false) MultipartFile imageFile) throws URISyntaxException, IOException {
         var paymentOpt = rentPaymentService.findById(id);
 
         if (paymentOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(rentPaymentService.save(rentPayment));
+            var saved = rentPaymentService.save(rentPayment);
+            if (imageFile != null) {
+                imageService.saveRentPayment(saved.getId(), imageFile);
+            }
+            return ResponseEntity.ok(saved);
         }
     }
     @PostMapping
-    public ResponseEntity<RentPayment> create(@RequestBody RentPayment rentPayment) throws URISyntaxException {
+    public ResponseEntity<RentPayment> create(
+            @RequestPart RentPayment rentPayment,
+            @RequestPart(required = false) MultipartFile imageFile) throws URISyntaxException, IOException {
         var saved = rentPaymentService.save(rentPayment);
-        return ResponseEntity.created(new URI("/leases/" + saved.getId())).body(saved);
+        if (imageFile != null) {
+            imageService.saveRentPayment(saved.getId(), imageFile);
+        }
+        return ResponseEntity.created(new URI("/rent-payments/" + saved.getId())).body(saved);
     }
 }
