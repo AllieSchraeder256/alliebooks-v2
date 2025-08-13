@@ -141,7 +141,7 @@ const LeaseEdit = () => {
             },
             body: JSON.stringify(lease),
         }).then(() => {
-            navigate('/', { replace: true });
+            navigate('/leases', { replace: true });
         });
     }
 

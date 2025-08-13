@@ -27,6 +27,7 @@ function App() {
                         <Route path='/expense-types/:id' element={<ExpenseTypeEdit />}/>
                         <Route path='/properties' exact={true} element={<PropertyList />}/>
                         <Route path='/properties/:id' element={<PropertyEdit />}/>
+                        <Route path='/leases' exact={true} element={<LeaseHome />}/>
                         <Route path='/leases/:id' element={<LeaseEdit />}/>
                         <Route path='/tenants' exact={true} element={<TenantList />}/>
                         <Route path='/tenants/:id' element={<TenantDetails />}/>
