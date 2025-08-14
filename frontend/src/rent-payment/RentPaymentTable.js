@@ -25,7 +25,7 @@ const RentPaymentTable = ({rentPayments, hideColumns}) => {
 
     return (
         <>
-        <Table className="mt-4">
+        <Table hover size="sm" className="mt-4">
             <thead>
                 <tr>
                     { hideColumns && hideColumns.includes('tenantName') ? '' : <th>Name</th> }

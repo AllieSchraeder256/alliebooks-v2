@@ -104,7 +104,8 @@ const RentPaymentEdit = () => {
             method: (rentPayment.id) ? 'PUT' : 'POST',
             body: formData,
         }).then(() => {
-            navigate(`/rent-payments?startDate=${encodeURIComponent(rentPayment.dueOn)}`, { replace: true });//TODO redirect to month that the payment was due on
+            const date = moment(expense.paidOn).startOf('month').format('yyyy-MM-DD');
+            navigate(`/rent-payments?startDate=${encodeURIComponent(date)}`, { replace: true });
         });
     }
 

@@ -14,7 +14,8 @@ import TenantDetails from "./tenant/TenantDetails";
 import TenantEdit from "./tenant/TenantEdit";
 import RentPaymentHome from "./rent-payment/RentPaymentHome";
 import RentPaymentEdit from "./rent-payment/RentPaymentEdit";
-
+import ExpenseHome from "./expense/ExpenseHome";
+import ExpenseEdit from "./expense/ExpenseEdit";
 
 function App() {
     return (
@@ -34,6 +35,8 @@ function App() {
                         <Route path='/tenants/edit/:id' element={<TenantEdit />}/>
                         <Route path='/rent-payments' exact={true} element={<RentPaymentHome />}/>
                         <Route path='/rent-payments/:id' element={<RentPaymentEdit />}/>
+                        <Route path='/expenses' exact={true} element={<ExpenseHome />}/>
+                        <Route path='/expenses/:id' element={<ExpenseEdit />}/>
                     </Route>
                 </Routes>
             </BrowserRouter>

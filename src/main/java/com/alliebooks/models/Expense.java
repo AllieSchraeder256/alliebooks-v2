@@ -23,18 +23,21 @@ public class Expense extends BaseModel {
 	@Column(name="image_path")
 	private String imagePath;
 
-	@Column(name="property_id", insertable=false, updatable=false)
+	@Transient
+	private boolean hasImage;
+
+	@Column(name="property_id")
 	private UUID propertyId;
 
 	@ManyToOne
-	@JoinColumn(name="property_id")
+	@JoinColumn(name="property_id", insertable=false, updatable=false)
 	private Property property;
 
-	@Column(name="expense_type_id", insertable=false, updatable=false)
+	@Column(name="expense_type_id")
 	private UUID expenseTypeId;
 
 	@ManyToOne
-	@JoinColumn(name="expense_type_id")
+	@JoinColumn(name="expense_type_id", insertable=false, updatable=false)
 	private ExpenseType expenseType;
 
 }
