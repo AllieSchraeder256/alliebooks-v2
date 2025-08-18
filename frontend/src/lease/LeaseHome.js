@@ -25,16 +25,16 @@ const [oldLeases, setOldLeases] = useState('');
     return (
         <>
         <div className="float-right">
-            <Button color="success" tag={Link} to="/leases/new">Add</Button>
+            <Button color="success" tag={Link} to="/leases/new">New Lease</Button>
         </div>
-        <h3>Current Leases</h3>
+        <h3>Current Leases ({leases.length})</h3>
         { leases && leases.map && leases.map(lease => {
-            return <LeaseCard lease={lease} />
+            return <LeaseCard key={lease.id} lease={lease} />
         }) }
 
-        <h3>Old Leases</h3>
+        <h3>Old Leases ({oldLeases.length})</h3>
         { oldLeases && oldLeases.map && oldLeases.map(oldLease => {
-            return <LeaseCard lease={oldLease} />
+            return <LeaseCard key={oldLease.id} lease={oldLease} />
         }) }
         </>
     );

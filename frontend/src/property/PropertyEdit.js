@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Button, Form, FormGroup, Input, Label, ButtonGroup } from 'reactstrap';
+import HelpText from '../components/HelpText';
 
 const emptyProperty = {
     name: '',
@@ -95,6 +96,13 @@ const PropertyEdit = () => {
                     <Label for="name">Name</Label>
                     <Input type="text" name="name" id="name" value={property.name || ''} onChange={handleChange} />
                 </FormGroup>
+                <FormGroup className="mt-4">
+                    <ButtonGroup size="sm">
+                        <Button color="primary" disabled={property.id} onClick={handleAddUnit}>Add Unit</Button>
+                        <Button color="secondary" disabled={property.id || unitCount <=1} color="danger" onClick={handleRemoveUnit}>Remove Unit</Button>
+                    </ButtonGroup>
+                    {property.id && <HelpText text = "Cannot add or remove units for existing properties." />}
+                </FormGroup>
                 {Array.from({ length: unitCount }).map((_, i) => (
                     <div key={i} className="unitDiv">
                         <FormGroup>
@@ -110,16 +118,7 @@ const PropertyEdit = () => {
                         </FormGroup>
                     </div>
                 ))}
-                { property.id ? (
-                    <p>Cannot add or remove units from an existing property</p>
-                ) : (
-                    <FormGroup className="mt-4">
-                        <ButtonGroup size="sm">
-                            <Button color="primary" onClick={handleAddUnit}>Add Unit</Button>
-                            <Button color="secondary" onClick={handleRemoveUnit}>Remove Unit</Button>
-                        </ButtonGroup>
-                    </FormGroup>
-                )}
+
                 <FormGroup className="mt-4">
                     <Button color="primary" type="submit">Save</Button>{' '}
                     <Button color="secondary" tag={Link} to="/properties">Cancel</Button>

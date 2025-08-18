@@ -4,7 +4,7 @@ import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
 import ReactCrop, { type Crop } from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
 
-const ImageModal = ({from, buttonText, onImageSelected}) => {
+const ImageModal = ({from, buttonText, buttonColor, onImageSelected}) => {
     const [modalOpen, setModalOpen] = useState(false);
     const [sourceImage, setSourceImage] = useState(null);
     const [crop, setCrop] = useState();
@@ -13,7 +13,7 @@ const ImageModal = ({from, buttonText, onImageSelected}) => {
     const [showMetadata, setShowMetadata] = useState(false);
 
     const fileInputRef = useRef(null); // For file input
-    const imageRef = useRef(null);     // For image element
+    const imageRef = useRef(null); // For image element
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -78,7 +78,7 @@ const ImageModal = ({from, buttonText, onImageSelected}) => {
     return (
         <>
             <Button
-                color="warning"
+                color={buttonColor || "warning"}
                 onClick={() => fileInputRef.current.click()}>
                 {buttonText || 'Upload Image'}
             </Button>

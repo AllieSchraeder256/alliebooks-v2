@@ -30,10 +30,10 @@ const [tenants, setTenants] = useState('');
 
     const tenantList = tenants && tenants.map && tenants.map(tenant => {
         return <tr key={tenant.id}>
-            <td style={{whiteSpace: 'nowrap'}}>{tenant.firstName} {tenant.lastName}</td>
-            <td style={{whiteSpace: 'nowrap'}}>{tenant.email}</td>
-            <td style={{whiteSpace: 'nowrap'}}>{tenant.hasCurrentLease ? "Yes" : "No"}</td>
-            <td style={{whiteSpace: 'nowrap'}}>{tenant.tenantLeases.length}</td>
+            <td>{tenant.firstName} {tenant.lastName}</td>
+            <td>{tenant.email}</td>
+            <td>{tenant.hasCurrentLease ? "Yes" : "No"}</td>
+            <td>{tenant.tenantLeases.length}</td>
             <td>
                 <Button size="sm" style={{paddingTop: '0px'}} color="link" tag={Link} to={"/tenants/" + tenant.id}>Details</Button>
             </td>
@@ -46,7 +46,7 @@ const [tenants, setTenants] = useState('');
             <Button color="success" tag={Link} to="/tenants/edit/new">Add</Button>
         </div>
         <h3>Tenants</h3>
-        <Table className="mt-4">
+        <Table hover>
             <thead>
                 <tr>
                     <th>Name</th>
@@ -56,9 +56,10 @@ const [tenants, setTenants] = useState('');
                     <th>Actions</th>
                 </tr>
             </thead>
+            {tenants && tenants.map &&
             <tbody>
                 {tenantList}
-            </tbody>
+            </tbody>}
         </Table>
         </>
     );

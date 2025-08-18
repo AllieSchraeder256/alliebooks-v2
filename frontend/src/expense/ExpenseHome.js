@@ -34,10 +34,10 @@ const ExpenseHome = () => {
         loadProperties();
     }, []);
 
-    const propertyOptions = properties && properties.map(property => {
+    const propertyOptions = properties && properties.map && properties.map(property => {
         return { value: property.id, label: property.name };
     });
-    const expenseTypeOptions = expenseTypes && expenseTypes.map(expenseType => {
+    const expenseTypeOptions = expenseTypes && expenseTypes.map && expenseTypes.map(expenseType => {
         return { value: expenseType.id, label: expenseType.name };
     });
 
@@ -163,7 +163,7 @@ const ExpenseHome = () => {
     return (
         <>
         <div className="float-right">
-            <ImageUploadModal from="expenseNew" buttonText="Add" />
+            <ImageUploadModal from="expenseNew" buttonText="New Expense" buttonColor="success" />
         </div>
         <Row className = "row-cols-sm-auto align-items-center">
             <h3>Expenses</h3>

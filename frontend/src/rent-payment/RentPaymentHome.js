@@ -117,7 +117,7 @@ const RentPaymentHome = () => {
     return (
         <>
         <div className="float-right">
-            <Button color="success" tag={Link} to="/rent-payments/new">Add</Button>
+            <Button color="success" tag={Link} to="/rent-payments/new">New Payment</Button>
         </div>
         <Row className = "row-cols-sm-auto align-items-center">
             <h3>Rent Payments</h3>
@@ -129,7 +129,9 @@ const RentPaymentHome = () => {
             </FormGroup>
         </Row>
         { searchTypeAdvanced ? detailedFilterDiv : basicFilterDiv }
-        <RentPaymentTable rentPayments={rentPayments} />
+        <Row className="mt-3">
+            <RentPaymentTable rentPayments={rentPayments} />
+        </Row>
         </>
     );
 }

@@ -25,6 +25,11 @@ const ExpenseEdit = () => {
     const [image, setImage] = useState(null);
     const [imageIsProcessing, setImageIsProcessing] = useState(false);
     const [receiptData, setReceiptData] = useState('');
+    const [highlightedFields, setHighlightedFields] = useState({
+        amount: false,
+        paidOn: false,
+        merchant: false
+    });
 
     const animatedComponents = makeAnimated();
     const navigate = useNavigate();
@@ -80,18 +85,24 @@ const ExpenseEdit = () => {
             body: formData,
         })).json();
 
+        const updatedExpense = { ...expense };
+        const updatedHighlights = { ...highlightedFields };
+
         if (response.amount) {
-            expense.amount = response.amount;
+            updatedExpense.amount = response.amount;
+            updatedHighlights.amount = true;
         }
         if (response.date) {
-            console.log('Processing paidOn date:', response.date);
-            expense.paidOn = moment(response.date).format('yyyy-MM-DD');
+            updatedExpense.paidOn = moment(response.date).format('YYYY-MM-DD');
+            updatedHighlights.paidOn = true;
         }
         if (response.merchant) {
-            expense.merchant = response.merchant;
+            updatedExpense.merchant = response.merchant;
+            updatedHighlights.merchant = true;
         }
         setReceiptData(response);
-        setExpense({...expense});
+        setExpense(updatedExpense);
+        setHighlightedFields(updatedHighlights);
         setImageIsProcessing(false);
     }
 
@@ -120,6 +131,9 @@ const ExpenseEdit = () => {
         const { name, value } = event.target;
         expense[name] = value;
         setExpense({...expense});
+        if (highlightedFields[name]) {
+            setHighlightedFields({ ...highlightedFields, [name]: false });
+        }
     }
 
     function handleFileChange(event) {
@@ -165,15 +179,15 @@ const ExpenseEdit = () => {
                         <Col md={4}>
                             <FormGroup>
                                 <Label for="amount">Amount</Label>
-                                <Input type="number" name="amount" id="amount" value={expense.amount || ''} onChange={handleChange} />
+                                <Input className={highlightedFields.amount ? 'highlight' : ''} type="number" name="amount" id="amount" value={expense.amount || ''} onChange={handleChange} />
                             </FormGroup>
                             <FormGroup>
                                 <Label for="paidOn">Paid On</Label>
-                                <Input type="date" name="paidOn" id="paidOn" value={expense.paidOn || ''} onChange={handleChange} />
+                                <Input className={highlightedFields.paidOn ? 'highlight' : ''} type="date" name="paidOn" id="paidOn" value={expense.paidOn || ''} onChange={handleChange} />
                             </FormGroup>
                             <FormGroup>
                                 <Label for="merchant">Merchant</Label>
-                                <Input type="text" name="merchant" id="merchant" value={expense.merchant || ''} onChange={handleChange} />
+                                <Input className={highlightedFields.merchant ? 'highlight' : ''} type="text" name="merchant" id="merchant" value={expense.merchant || ''} onChange={handleChange} />
                             </FormGroup>
                             <FormGroup>
                                 <ImageUploadModal

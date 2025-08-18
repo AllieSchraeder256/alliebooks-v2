@@ -7,7 +7,10 @@ import {
     AccordionBody,
     AccordionHeader,
     AccordionItem,
-    Container
+    Container,
+    Card,
+    CardBody,
+    CardTitle
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
@@ -52,20 +55,22 @@ const LeaseCard = ({lease}) => {
         <Container fluid className="ps-0 d-flex justify-content-between">
             <span>Rent Payments</span>
             <span className={moment(nextPaymentDueOn) < moment() ? "overdue-balance" : ""}>Payment Due: {nextPaymentDueOn ? moment(nextPaymentDueOn).format('MMM DD YYYY') : 'N/A'}</span>
-            <Button size="sm" color="primary" tag={Link} to={"/rent-payments/new?leaseId=" + lease.id}>New Payment</Button>
-
+            <Button size="sm" color="success" outline tag={Link} to={"/rent-payments/new?leaseId=" + lease.id}>New Payment</Button>
         </Container>
          </>);
     }
 
     return (
         <>
-        <div key={lease.id} className="card">
-            <div class="card-body">
+        <Card key={lease.id} >
+            <CardTitle tag="h5">
                 <div className="float-right">
-                    <Button outline color="success" size="sm" tag={Link} to={"/leases/" + lease.id} >Edit</Button>
+                    <Button outline color="primary" size="sm" tag={Link} to={"/leases/" + lease.id} >Edit</Button>
                 </div>
-                <h5 class="card-title">{lease.unit.property.name} - {lease.unit.name}</h5>
+                {lease.unit.property.name} - {lease.unit.name}
+            </CardTitle>
+            <CardBody style={{paddingBottom: '0px'}}>
+
 
                 <Accordion flush open={accordionOpen} toggle={toggle} style={{padding: '0px'}}>
                     <AccordionItem>
@@ -91,8 +96,8 @@ const LeaseCard = ({lease}) => {
                         </AccordionBody>
                     </AccordionItem>
                 </Accordion>
-            </div>
-        </div>
+            </CardBody>
+        </Card>
         </>
     );
 }

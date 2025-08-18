@@ -1,10 +1,5 @@
 
-.propertyDiv {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid black;
-}
+
 .unitDiv {
     margin-top: 10px;
     margin-bottom: 10px;
@@ -14,7 +9,6 @@
 }
 
 .card {
-    padding: 0px;
     margin-top: 10px;
     margin-bottom: 10px;
 }
@@ -43,4 +37,18 @@
 }
 .overdue-balance{
     color: red !important;
+}
+.highlight {
+    border-color: blue !important;
+}
+.card-title {
+    padding-top:10px !important;
+    padding-left:10px !important;
+    padding-bottom:0px !important;
+    padding-right:10px !important;
+    margin-bottom:0px !important;
+}
+.card-body {
+    padding-top:0px !important;
+    margin-top:0px !important;
 }

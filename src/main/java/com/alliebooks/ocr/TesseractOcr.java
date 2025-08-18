@@ -1,7 +1,6 @@
 package com.alliebooks.ocr;
 
 import net.sourceforge.tess4j.Tesseract;
-import net.sourceforge.tess4j.TesseractException;
 import org.apache.tika.Tika;
 import org.apache.tika.mime.MimeType;
 import org.apache.tika.mime.MimeTypeException;
@@ -51,7 +50,7 @@ public class TesseractOcr {
         var contentType = tika.detect(input.getBytes());
         MimeTypes allTypes = MimeTypes.getDefaultMimeTypes();
         MimeType type = allTypes.forName(contentType);
-        File file = new File("src/main/resources/tempImage." + type.getExtension());
+        File file = new File("src/main/resources/tempImage" + type.getExtension());
         OutputStream out = new FileOutputStream(file);
         out.write(input.getBytes());
         out.close();

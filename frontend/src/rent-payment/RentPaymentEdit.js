@@ -189,11 +189,12 @@ const RentPaymentEdit = () => {
                             />
                         </Col>
                     </Row>
-                    <FormGroup>
-                        <Button color="primary" type="submit">Save</Button>{' '}
-                        <Button color="secondary" tag={Link} to="/">Cancel</Button>
-                    </FormGroup>
-
+                    <Row>
+                        <FormGroup>
+                            <Button color="primary" type="submit">Save</Button>{' '}
+                            <Button color="secondary" tag={Link} to="/">Cancel</Button>
+                        </FormGroup>
+                    </Row>
                 </Form>
             </Container>
         </div>

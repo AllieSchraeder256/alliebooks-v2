@@ -19,7 +19,7 @@ const ExpenseTable = ({expenses}) => {
 
     return (
         <>
-        <Table hover size="sm" className="mt-4">
+        <Table hover responsive size="sm" className="mt-4">
             <thead>
                 <tr>
                     <th>Amount</th>

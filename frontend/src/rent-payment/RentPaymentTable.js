@@ -8,14 +8,14 @@ const RentPaymentTable = ({rentPayments, hideColumns}) => {
 
     const rentPaymentList = rentPayments && rentPayments.map && rentPayments.map(payment => {
          return <tr key={payment.id}>
-            { hideColumns && hideColumns.includes('tenantName') ? '' : <td >{payment.lease.tenantList}</td> }
-            { hideColumns && hideColumns.includes('property') ? '' : <td>{payment.lease.unit.property.name} - {payment.lease.unit.name}</td> }
+            { hideColumns && hideColumns.includes('tenantName') ? null : <td >{payment.lease.tenantList}</td> }
+            { hideColumns && hideColumns.includes('property') ? null : <td>{payment.lease.unit.property.name} - {payment.lease.unit.name}</td> }
             <td>{payment.amount}</td>
             <td>{payment.receivedOn}</td>
             <td>{payment.dueOn}</td>
             <td>{payment.note}</td>
-            <td>{payment.hasImage ? <ImageViewModal resourceId={payment.id}/> : '' }</td>
-            { hideColumns && hideColumns.includes('edit') ? '' :
+            <td>{payment.hasImage ? <ImageViewModal resourceId={payment.id}/> : null }</td>
+            { hideColumns && hideColumns.includes('edit') ? null :
                 <td>
                     <Button size="sm" style={{paddingTop: '0px'}} color="link" tag={Link} to={"/rent-payments/" + payment.id}>Edit</Button>
                 </td>
@@ -25,20 +25,21 @@ const RentPaymentTable = ({rentPayments, hideColumns}) => {
 
     return (
         <>
-        <Table hover size="sm" className="mt-4">
+        <Table responsive hover size="sm" >
             <thead>
                 <tr>
-                    { hideColumns && hideColumns.includes('tenantName') ? '' : <th>Name</th> }
-                    { hideColumns && hideColumns.includes('property') ? '' : <th>Property</th>}
+                    { hideColumns && hideColumns.includes('tenantName') ?  null : <th>Name</th> }
+                    { hideColumns && hideColumns.includes('property') ? null : <th>Property</th>}
                     <th>Amount</th>
                     <th>Received On</th>
                     <th>Due On</th>
                     <th>Notes</th>
                     <th>Image</th>
-                    { hideColumns && hideColumns.includes('edit') ? '' : <th>Edit</th> }
+                    { hideColumns && hideColumns.includes('edit') ? null : <th>Edit</th> }
                 </tr>
             </thead>
-            <tbody>{rentPaymentList}</tbody>
+            {rentPayments && rentPayments.map &&
+                <tbody>{rentPaymentList}</tbody>}
         </Table>
         </>
     );

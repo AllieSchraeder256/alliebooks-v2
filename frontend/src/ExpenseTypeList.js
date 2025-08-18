@@ -30,7 +30,7 @@ const [expenseTypes, setExpenseTypes] = useState('');
 
     const expenseTypeList = expenseTypes && expenseTypes.map && expenseTypes.map(expenseType => {
         return <tr key={expenseType.id}>
-            <td style={{whiteSpace: 'nowrap'}}>{expenseType.name}</td>
+            <td>{expenseType.name}</td>
             <td>
                 <ButtonGroup>
                     <Button size="sm" color="primary" tag={Link} to={"/expense-types/" + expenseType.id}>Edit</Button>
@@ -43,19 +43,21 @@ const [expenseTypes, setExpenseTypes] = useState('');
     return (
         <>
         <div className="float-right">
-            <Button color="success" tag={Link} to="/expense-types/new">Add</Button>
+            <Button color="success" tag={Link} to="/expense-types/new">New Type</Button>
         </div>
         <h3>Expense Types</h3>
-        <Table className="mt-4">
+        <Table hover>
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Active</th>
+                    <th>Action</th>
                 </tr>
             </thead>
-            <tbody>
-                {expenseTypeList}
-            </tbody>
+            {expenseTypes && expenseTypes.map &&
+                <tbody>
+                    {expenseTypeList}
+                </tbody>
+            }
         </Table>
         </>
     );
