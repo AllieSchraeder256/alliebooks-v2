@@ -4,6 +4,7 @@ import { Button, Container, Form, FormGroup, Input, Label, Row, Col } from 'reac
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
 import moment from 'moment';
+import ImageUploadModal from '../components/ImageUploadModal';
 
 const emptyPayment = {
     amount: 0,
@@ -32,7 +33,6 @@ const RentPaymentEdit = () => {
     console.log('useEffect called with id:', id);
         if (id != 'new') {
             loadRentPayment(id);
-            loadImage(id);
         }
         if (leaseId) {
             loadLease(leaseId);
@@ -45,11 +45,17 @@ const RentPaymentEdit = () => {
     const loadRentPayment = async (id) => {
         const rentPayment = await (await fetch(`/rent-payments/${id}`)).json();
         setRentPayment(rentPayment);
+        if (rentPayment.hasImage) {
+            loadImage(id);
+        }
     }
     const loadImage = async (id) => {
-        const imageData = await (await fetch(`/images?resourceId=${id}`)).json();
-        setImage(imageData);
-
+        try {
+            const imageData = await (await fetch(`/images?resourceId=${id}`)).json();
+            setImage(imageData);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     const loadLease = async (id) => {
@@ -128,71 +134,66 @@ const RentPaymentEdit = () => {
                 {title}
                 <Form onSubmit={handleSubmit}>
                     <Row>
-                        <FormGroup>
-                            <Label for="leaseSelect">Lease</Label>
-                            <Select
-                                id = "leaseSelect"
-                                options={currentLeaseOptions}
-                                components={animatedComponents}
-                                onChange={choice => setSelectedLease(choice)}
-                                value = {currentLeaseOptions ? currentLeaseOptions.find(option => option.value === rentPayment.leaseId) : null}
-                                placeholder="Lease"
-                                backspaceRemovesValue
-                                isClearable />
-                        </FormGroup>
-                    </Row>
-
-                    <Row>
-                        <Col md={3}>
+                        <Col md={4}>
+                            <FormGroup>
+                                <Label for="leaseSelect">Lease</Label>
+                                <Select
+                                    id = "leaseSelect"
+                                    options={currentLeaseOptions}
+                                    components={animatedComponents}
+                                    onChange={choice => setSelectedLease(choice)}
+                                    value = {currentLeaseOptions ? currentLeaseOptions.find(option => option.value === rentPayment.leaseId) : null}
+                                    placeholder="Lease"
+                                    backspaceRemovesValue
+                                    isClearable />
+                            </FormGroup>
                             <FormGroup>
                                 <Label for="amount">Rent Amount</Label>
                                 <Input type="number" name="amount" id="amount" value={rentPayment.amount || ''} onChange={handleChange} />
                             </FormGroup>
-                        </Col>
-
-                    </Row>
-                    <Row>
-                        <Col md={6}>
-                            <FormGroup>
-                                <Label for="receivedOn">Received On</Label>
-                                <Input type="date" name="receivedOn" id="receivedOn" value={rentPayment.receivedOn || ''} onChange={handleChange} />
-                            </FormGroup>
-                        </Col>
-                        <Col md={6}>
-                            <FormGroup>
-                                <Label for="dueOn">Due On</Label>
-                                <Input type="date" name="dueOn" id="dueOn" value={rentPayment.dueOn || ''} onChange={handleChange} />
-                            </FormGroup>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
                             <FormGroup>
                                 <Label for="note">Note</Label>
                                 <Input type="text" name="note" id="note" value = {rentPayment.note || ''} onChange={handleChange} />
                             </FormGroup>
                         </Col>
+                        <Col md={4}>
+                            <FormGroup>
+                                <Label for="receivedOn">Received On</Label>
+                                <Input type="date" name="receivedOn" id="receivedOn" value={rentPayment.receivedOn || ''} onChange={handleChange} />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label for="dueOn">Due On</Label>
+                                <Input type="date" name="dueOn" id="dueOn" value={rentPayment.dueOn || ''} onChange={handleChange} />
+                            </FormGroup>
+                        </Col>
+                        <Col md={4}>
+                            {updatedImageFile ?
+                                <img style={{objectFit: 'cover', maxHeight:'800px', maxWidth:'100%'}} src={URL.createObjectURL(updatedImageFile)} alt="Image preview" />
+                                : image && <img style={{objectFit: 'cover', maxHeight:'100vh', maxWidth:'100%'}}  src={`data:image/jpeg;base64,${image.data}`} alt="Image preview" />
+                            }
+                        </Col>
                     </Row>
                     <Row>
                         <Col>
                             <FormGroup>
-                                <Label for="imagePath">File</Label>
                                 <Input
                                     id="imagePath"
                                     name="imagePath"
                                     type="file"
+                                    style={{ display: 'none' }}
                                     onChange={handleFileChange} />
                             </FormGroup>
+                            <ImageUploadModal
+                                from = "rentPaymentEdit"
+                                onImageSelected={file => {setUpdatedImageFile(file);}}
+                            />
                         </Col>
                     </Row>
                     <FormGroup>
                         <Button color="primary" type="submit">Save</Button>{' '}
                         <Button color="secondary" tag={Link} to="/">Cancel</Button>
                     </FormGroup>
-                    <Row>
-                        {updatedImageFile && <img src={URL.createObjectURL(updatedImageFile)} alt="Image preview" />}
-                        {image && <img src={`data:image/jpeg;base64,${image.data}`} alt="Image preview" />}
-                    </Row>
+
                 </Form>
             </Container>
         </div>

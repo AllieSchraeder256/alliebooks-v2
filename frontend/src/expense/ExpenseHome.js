@@ -4,6 +4,7 @@ import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
 import { Link, useSearchParams } from 'react-router-dom';
 import ExpenseTable from './ExpenseTable';
+import ImageUploadModal from '../components/ImageUploadModal';
 import moment from 'moment';
 
 const ExpenseHome = () => {
@@ -162,7 +163,7 @@ const ExpenseHome = () => {
     return (
         <>
         <div className="float-right">
-            <Button color="success" tag={Link} to="/expenses/new">Add</Button>
+            <ImageUploadModal from="expenseNew" buttonText="Add" />
         </div>
         <Row className = "row-cols-sm-auto align-items-center">
             <h3>Expenses</h3>

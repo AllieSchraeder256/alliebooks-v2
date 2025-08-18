@@ -1,7 +1,6 @@
 package com.alliebooks.services;
 
 import com.alliebooks.models.BaseModel;
-import com.alliebooks.models.ExpenseType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.Instant;

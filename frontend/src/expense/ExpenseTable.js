@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, ButtonGroup, Table } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import ImageModal from '../components/ImageModal';
+import ImageViewModal from '../components/ImageViewModal';
 
 const ExpenseTable = ({expenses}) => {
     const expenseList = expenses && expenses.map && expenses.map(expense => {
@@ -12,10 +12,8 @@ const ExpenseTable = ({expenses}) => {
             <td>{expense.note}</td>
             <td>{expense.property ? expense.property.name : 'N/A'}</td>
             <td>{expense.expenseType ? expense.expenseType.name : 'N/A'}</td>
-            <td>{expense.hasImage ? <ImageModal resourceId={expense.id}/> : '' }</td>
-            <td>
-                <Button size="sm" style={{paddingTop: '0px'}} color="link" tag={Link} to={"/expenses/" + expense.id}>Edit</Button>
-            </td>
+            <td>{expense.hasImage ? <ImageViewModal resourceId={expense.id}/> : '' }</td>
+            <td><Button size="sm" style={{paddingTop: '0px'}} color="link" tag={Link} to={"/expenses/" + expense.id}>Edit</Button></td>
         </tr>
     });
 
@@ -34,7 +32,7 @@ const ExpenseTable = ({expenses}) => {
                     <th>Edit</th>
                 </tr>
             </thead>
-            <tbody>{expenseList}</tbody>
+            {expenseList && <tbody>{expenseList}</tbody>}
         </Table>
         </>
     );

@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useParams, useSearchParams, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState, useRef } from 'react';
+import { Link, useParams, useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label, Row, Col } from 'reactstrap';
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
 import moment from 'moment';
+import HelpText from '../components/HelpText';
+import ImageUploadModal from '../components/ImageUploadModal';
 
 const emptyExpense = {
     amount: 0,
@@ -21,9 +23,13 @@ const ExpenseEdit = () => {
     const [properties, setProperties] = useState([]);
     const [updatedImageFile, setUpdatedImageFile] = useState(null);
     const [image, setImage] = useState(null);
+    const [imageIsProcessing, setImageIsProcessing] = useState(false);
+    const [receiptData, setReceiptData] = useState('');
 
     const animatedComponents = makeAnimated();
     const navigate = useNavigate();
+    const location = useLocation();
+    const imageProcessedRef = useRef(false);
 
     const title = <h2>{id != 'new' ? 'Edit Expense' : 'Add Expense'}</h2>;
 
@@ -31,19 +37,29 @@ const ExpenseEdit = () => {
         console.log('expense useEffect called with id:', id);
         if (id != 'new') {
             loadExpense(id);
-            loadImage(id);
+        } else if (
+            location.state &&
+            location.state.imageFile &&
+            !imageProcessedRef.current
+        ) {
+            setUpdatedImageFile(location.state.imageFile);
+            processImage(location.state.imageFile);
+            imageProcessedRef.current = true;
         }
+
         loadExpenseTypes();
         loadProperties();
-    }, []);
+    }, [location.state]);
 
     const loadExpense = async (id) => {
         const expense = await (await fetch(`/expenses/${id}`)).json();
         setExpense(expense);
-    }
-    const loadImage = async (id) => {
-        const imageData = await (await fetch(`/images?resourceId=${id}`)).json();
-        setImage(imageData);
+
+        if (expense.hasImage) {
+            console.log('Loading image for expense with id:', id);
+            const imageData = await (await fetch(`/images?resourceId=${id}`)).json();
+            setImage(imageData);
+        }
     }
     const loadExpenseTypes = async () => {
         const expenseTypes = await (await fetch(`/expense-types`)).json();
@@ -54,6 +70,31 @@ const ExpenseEdit = () => {
         const properties = await (await fetch(`/properties`)).json();
         setProperties(properties);
     }
+    const processImage = async (file) => {
+        setImageIsProcessing(true);
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const response = await(await fetch('/images/ocr', {
+            method: 'POST',
+            body: formData,
+        })).json();
+
+        if (response.amount) {
+            expense.amount = response.amount;
+        }
+        if (response.date) {
+            console.log('Processing paidOn date:', response.date);
+            expense.paidOn = moment(response.date).format('yyyy-MM-DD');
+        }
+        if (response.merchant) {
+            expense.merchant = response.merchant;
+        }
+        setReceiptData(response);
+        setExpense({...expense});
+        setImageIsProcessing(false);
+    }
+
     const propertyOptions = properties && properties.map(property => {
         return { value: property.id, label: property.name };
     });
@@ -84,6 +125,8 @@ const ExpenseEdit = () => {
     function handleFileChange(event) {
         setImage(null);
         setUpdatedImageFile(event.target.files[0]);
+
+        processImage(event.target.files[0]);
     }
 
     async function saveExpense() {
@@ -119,38 +162,42 @@ const ExpenseEdit = () => {
                 {title}
                 <Form onSubmit={handleSubmit}>
                     <Row>
-                        <Col md={6}>
+                        <Col md={4}>
                             <FormGroup>
                                 <Label for="amount">Amount</Label>
                                 <Input type="number" name="amount" id="amount" value={expense.amount || ''} onChange={handleChange} />
                             </FormGroup>
-                        </Col>
-                        <Col md={6}>
                             <FormGroup>
                                 <Label for="paidOn">Paid On</Label>
                                 <Input type="date" name="paidOn" id="paidOn" value={expense.paidOn || ''} onChange={handleChange} />
                             </FormGroup>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
                             <FormGroup>
                                 <Label for="merchant">Merchant</Label>
                                 <Input type="text" name="merchant" id="merchant" value={expense.merchant || ''} onChange={handleChange} />
                             </FormGroup>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
                             <FormGroup>
-                                <Label for="note">Note</Label>
-                                <Input type="text" name="note" id="note" value = {expense.note || ''} onChange={handleChange} />
+                                <ImageUploadModal
+                                    from = "expenseEdit"
+                                    onImageSelected={file => {
+                                        setUpdatedImageFile(file);
+                                        processImage(file);
+                                }}/>
+                                {imageIsProcessing && <HelpText text="Processing image, please wait..." />}
+                                <Input
+                                    id="imagePath"
+                                    name="imagePath"
+                                    type="file"
+                                    style={{ display: 'none' }}
+                                    onChange={handleFileChange} />
+                            </FormGroup>
+                            <br/>
+                            <FormGroup>
+                                <Button color="primary" type="submit">Save</Button>{' '}
+                                <Button color="secondary" tag={Link} to="/">Cancel</Button>
                             </FormGroup>
                         </Col>
-                    </Row>
-                    <Row>
-                         <Col md={6}>
-                             <FormGroup>
+                        <Col md={4}>
+                            <FormGroup>
                                  <Label for="propertySelect">Property</Label>
                                  <Select
                                      id = "propertySelect"
@@ -161,10 +208,8 @@ const ExpenseEdit = () => {
                                      placeholder="Property"
                                      backspaceRemovesValue
                                      isClearable />
-                             </FormGroup>
-                         </Col>
-                         <Col md={6}>
-                             <FormGroup>
+                            </FormGroup>
+                            <FormGroup>
                                  <Label for="expenseTypeSelect">Expense Type</Label>
                                       <Select
                                           id = "expenseTypeSelect"
@@ -175,28 +220,18 @@ const ExpenseEdit = () => {
                                           placeholder="Expense Type"
                                           backspaceRemovesValue
                                           isClearable />
-                             </FormGroup>
-                         </Col>
-                     </Row>
-                    <Row>
-                        <Col>
+                            </FormGroup>
                             <FormGroup>
-                                <Label for="imagePath">File</Label>
-                                <Input
-                                    id="imagePath"
-                                    name="imagePath"
-                                    type="file"
-                                    onChange={handleFileChange} />
+                                <Label for="note">Note</Label>
+                                <Input type="text" name="note" id="note" value = {expense.note || ''} onChange={handleChange} />
                             </FormGroup>
                         </Col>
-                    </Row>
-                    <FormGroup>
-                        <Button color="primary" type="submit">Save</Button>{' '}
-                        <Button color="secondary" tag={Link} to="/">Cancel</Button>
-                    </FormGroup>
-                    <Row>
-                        {updatedImageFile && <img src={URL.createObjectURL(updatedImageFile)} alt="Image preview" />}
-                        {image && <img src={`data:image/jpeg;base64,${image.data}`} alt="Image preview" />}
+                        <Col md={4}>
+                            {updatedImageFile ?
+                                <img style={{objectFit: 'cover', maxHeight:'800px', maxWidth:'100%'}} src={URL.createObjectURL(updatedImageFile)} alt="Image preview" />
+                                : image && <img style={{objectFit: 'cover', maxHeight:'100vh', maxWidth:'100%'}}  src={`data:image/jpeg;base64,${image.data}`} alt="Image preview" />
+                            }
+                        </Col>
                     </Row>
                 </Form>
             </Container>

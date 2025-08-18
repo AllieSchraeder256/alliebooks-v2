@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -28,5 +29,12 @@ public class ExpenseService extends BaseCrudService<Expense> {
 			expense.setHasImage(imageService.hasImage(expense.getId()));
 		}
 		return expenses;
+	}
+
+	@Override
+	public Optional<Expense> findById(UUID id) {
+		var expense = super.findById(id);
+        expense.ifPresent(e -> e.setHasImage(imageService.hasImage(id)));
+		return expense;
 	}
 }
