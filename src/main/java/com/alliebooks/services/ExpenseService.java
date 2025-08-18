@@ -23,7 +23,7 @@ public class ExpenseService extends BaseCrudService<Expense> {
     }
 
 	public List<Expense> getExpenses(LocalDate start, LocalDate end, UUID propertyId, UUID expenseTypeId, String searchText) {
-		var expenses = repository.findByParameters(start, end, propertyId, expenseTypeId, searchText);
+		var expenses = repository.findByParameters(start, end, propertyId, expenseTypeId, searchText == null ? null : searchText.toLowerCase());
 
 		for (var expense : expenses) {
 			expense.setHasImage(imageService.hasImage(expense.getId()));

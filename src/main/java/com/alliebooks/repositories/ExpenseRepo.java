@@ -16,7 +16,7 @@ public interface ExpenseRepo extends JpaRepository<Expense, UUID> {
             select expense from Expense expense where paidOn between :start and :end
             and (:propertyId is null or propertyId = :propertyId)
             and (:expenseTypeId is null or expenseTypeId = :expenseTypeId)
-            and (:searchText is null or merchant like %:searchText% or note like %:searchText%)
+            and (:searchText is null or lower(merchant) like %:searchText% or lower(note) like %:searchText%)
             order by paidOn desc, expenseTypeId, propertyId
             """;
     @Query(QUERY)
