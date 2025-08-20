@@ -10,15 +10,19 @@ import {
     Container,
     Card,
     CardBody,
-    CardTitle
+    CardTitle,
+    Row,
+    Col
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import RentPaymentTable from '../rent-payment/RentPaymentTable';
+import Notes from '../components/Notes';
 
 const LeaseCard = ({lease}) => {
     const [rentPayments, setRentPayments] = useState([]);
     const [accordionOpen, setAccordionOpen] = useState('');
+
     const toggle = (id) => {
         if (accordionOpen === id) {
             setAccordionOpen();
@@ -80,9 +84,16 @@ const LeaseCard = ({lease}) => {
                                 rent={lease.rent}/>
                         </AccordionHeader>
                         <AccordionBody accordionId="1">
-                            <p>Lease Term: {moment(lease.startDate).format('MMM DD YYYY')} {lease.endDate ? " to " +moment(lease.endDate).format('MMM DD YYYY') : " (month to month)"}</p>
-                            <p>Deposit: ${lease.deposit}</p>
-                            <p>Deposit Paid: { moment(lease.depositPaidDate).format('MMM DD YYYY')}</p>
+                            <Row>
+                                <Col md="6">
+                                    <p>Lease Term: {moment(lease.startDate).format('MMM DD YYYY')} {lease.endDate ? " to " +moment(lease.endDate).format('MMM DD YYYY') : " (month to month)"}</p>
+                                    <p>Deposit: ${lease.deposit}</p>
+                                    <p>Deposit Paid: { moment(lease.depositPaidDate).format('MMM DD YYYY')}</p>
+                                </Col>
+                                <Col md="6">
+                                    <Notes leaseId={lease.id} initialNotes={lease.notes || []} />
+                                </Col>
+                            </Row>
                         </AccordionBody>
                     </AccordionItem>
                     <AccordionItem>

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { Button, Container, ButtonGroup, UncontrolledTooltip } from 'reactstrap';
+import { Button, Container, ButtonGroup, UncontrolledTooltip, Row, Col } from 'reactstrap';
 import Select from 'react-select'
 import LeaseCard from '../lease/LeaseCard';
 import HelpText from '../components/HelpText';
+import Notes from '../components/Notes';
 
 const TenantDetails = () => {
     const id = useParams().id;
@@ -45,8 +46,14 @@ const TenantDetails = () => {
                 }
             </div>
             <h3>{tenant.firstName} {tenant.lastName}</h3>
-            Email: {tenant.email}<br />
-
+            <Row>
+                <Col md={3}>
+                    Email: {tenant.email}<br />
+                </Col>
+                <Col md={5}>
+                    <Notes tenantId={tenant.id} initialNotes={tenant.notes} />
+                </Col>
+            </Row>
             <h5>Current Leases</h5>
             { tenant.tenantLeases && tenant.tenantLeases.map && tenant.tenantLeases.map(tenantLease => {
                 if (tenantLease.lease.current) {

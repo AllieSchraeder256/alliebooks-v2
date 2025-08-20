@@ -3,7 +3,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label, Row, Col } from 'reactstrap';
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
-
+import moment from 'moment';
 
 const emptyLease = {
     rent: null,
@@ -231,13 +231,13 @@ const LeaseEdit = () => {
                     )}
 
                     <Row>
-                        <Col md={6}>
+                        <Col md={4}>
                             <FormGroup>
                                 <Label for="rent">Rent</Label>
                                 <Input type="number" name="rent" id="rent" value={lease.rent || ''} onChange={handleChange} />
                             </FormGroup>
                         </Col>
-                        <Col md={6}>
+                        <Col md={4}>
                             <FormGroup>
                                 <Label for="balance">Balance</Label>
                                 <Input type="number" name="balance" id="balance" value={lease.balance || ''} onChange={handleChange} />
@@ -245,13 +245,13 @@ const LeaseEdit = () => {
                         </Col>
                     </Row>
                     <Row>
-                        <Col md={6}>
+                        <Col md={4}>
                             <FormGroup>
                                 <Label for="startDate">Start Date</Label>
                                 <Input type="date" name="startDate" id="startDate" value = {lease.startDate || ''} onChange={handleChange} />
                             </FormGroup>
                         </Col>
-                        <Col md={6}>
+                        <Col md={4}>
                             <FormGroup>
                                 <Label for="endDate">End Date</Label>
                                 <Input type="date" name="endDate" id="endDate" value = {lease.endDate || ''} onChange={handleChange} />
@@ -259,13 +259,13 @@ const LeaseEdit = () => {
                         </Col>
                     </Row>
                     <Row>
-                        <Col md={6}>
+                        <Col md={4}>
                             <FormGroup>
                                 <Label for="deposit">Deposit Amount</Label>
                                 <Input type="number" name="deposit" id="deposit" value={lease.deposit || ''} onChange={handleChange} />
                             </FormGroup>
                         </Col>
-                         <Col md={6}>
+                         <Col md={4}>
                             <FormGroup>
                                 <Label for="depositReturnDate">Deposit Paid On</Label>
                                 <Input type="date" name="depositPaidDate" id="depositPaidDate" value={lease.depositPaidDate || ''} onChange={handleChange} />
@@ -274,13 +274,13 @@ const LeaseEdit = () => {
                     </Row>
                     { !lease.current &&
                         <Row>
-                            <Col md={6}>
+                            <Col md={4}>
                                 <FormGroup>
                                     <Label for="depositReturned">Deposit Amount Returned</Label>
                                     <Input type="number" name="depositReturned" id="depositReturned" value={lease.depositReturned || ''} onChange={handleChange} />
                                 </FormGroup>
                             </Col>
-                             <Col md={6}>
+                             <Col md={4}>
                                 <FormGroup>
                                     <Label for="depositReturnDate">Deposit Returned On</Label>
                                     <Input type="date" name="depositReturnDate" id="depositReturnDate" value={lease.depositReturnDate || ''} onChange={handleChange} />
