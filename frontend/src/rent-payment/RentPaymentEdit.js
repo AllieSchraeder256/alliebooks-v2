@@ -5,6 +5,7 @@ import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
 import moment from 'moment';
 import ImageUploadModal from '../components/ImageUploadModal';
+import { apiFetch } from '../utils/api';
 
 const emptyPayment = {
     amount: 0,
@@ -43,7 +44,7 @@ const RentPaymentEdit = () => {
     }, []);
 
     const loadRentPayment = async (id) => {
-        const rentPayment = await (await fetch(`/rent-payments/${id}`)).json();
+        const rentPayment = await (await apiFetch(`/rent-payments/${id}`)).json();
         setRentPayment(rentPayment);
         if (rentPayment.hasImage) {
             loadImage(id);
@@ -51,7 +52,7 @@ const RentPaymentEdit = () => {
     }
     const loadImage = async (id) => {
         try {
-            const imageData = await (await fetch(`/images?resourceId=${id}`)).json();
+            const imageData = await (await apiFetch(`/images?resourceId=${id}`)).json();
             setImage(imageData);
         } catch (error) {
             console.log(error);
@@ -59,7 +60,7 @@ const RentPaymentEdit = () => {
     }
 
     const loadLease = async (id) => {
-        const lease = await (await fetch(`/leases/${id}`)).json();
+        const lease = await (await apiFetch(`/leases/${id}`)).json();
         setLease(lease);
         rentPayment.leaseId = lease.id;
         rentPayment.amount = lease.rent;
@@ -68,7 +69,7 @@ const RentPaymentEdit = () => {
     }
 
     const loadCurrentLeaseSummary = async () => {
-        const leaseSummary = await (await fetch('/leases/current-lease-summary')).json();
+        const leaseSummary = await (await apiFetch('/leases/current-lease-summary')).json();
         setCurrentLeaseSummary(leaseSummary);
     }
 
@@ -106,7 +107,7 @@ const RentPaymentEdit = () => {
         formData.append("rentPayment", new Blob([JSON.stringify(rentPayment)], { type: "application/json" }));
         formData.append("imageFile", updatedImageFile);
 
-        await fetch('/rent-payments' + (rentPayment.id ? '/' + rentPayment.id : ''), {
+        await apiFetch('/rent-payments' + (rentPayment.id ? '/' + rentPayment.id : ''), {
             method: (rentPayment.id) ? 'PUT' : 'POST',
             body: formData,
         }).then(() => {
@@ -116,7 +117,7 @@ const RentPaymentEdit = () => {
     }
 
     async function remove(id) {
-        await fetch(`/rent-payments/${id}`, {
+        await apiFetch(`/rent-payments/${id}`, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',

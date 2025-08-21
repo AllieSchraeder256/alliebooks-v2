@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, FormGroup, Input, InputGroup } from 'reactstrap';
 import moment from 'moment';
+import { apiFetch } from '../utils/api';
 
 const Notes = ({ leaseId, tenantId, initialNotes = [] }) => {
 	const [notes, setNotes] = useState(initialNotes || []);
@@ -17,7 +18,7 @@ const Notes = ({ leaseId, tenantId, initialNotes = [] }) => {
 			leaseId: leaseId ? leaseId : null,
             tenantId: tenantId ? tenantId : null,
 		};
-		await fetch('/notes', {
+		await apiFetch('/notes', {
 			method: 'POST',
 			headers: {
 				'Accept': 'application/json',

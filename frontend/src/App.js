@@ -16,6 +16,10 @@ import RentPaymentHome from "./rent-payment/RentPaymentHome";
 import RentPaymentEdit from "./rent-payment/RentPaymentEdit";
 import ExpenseHome from "./expense/ExpenseHome";
 import ExpenseEdit from "./expense/ExpenseEdit";
+import SignupForm from './components/SignupForm';
+import AdminHome from "./admin/AdminHome";
+import LoginForm from './components/LoginForm';
+import RequireAuth from './components/RequireAuth';
 
 function App() {
     return (
@@ -23,20 +27,28 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route element={<AppNavbar />} >
-                        <Route path='/' exact={true} element={<LeaseHome />}/>
-                        <Route path='/expense-types' exact={true} element={<ExpenseTypeList />}/>
-                        <Route path='/expense-types/:id' element={<ExpenseTypeEdit />}/>
-                        <Route path='/properties' exact={true} element={<PropertyList />}/>
-                        <Route path='/properties/:id' element={<PropertyEdit />}/>
-                        <Route path='/leases' exact={true} element={<LeaseHome />}/>
-                        <Route path='/leases/:id' element={<LeaseEdit />}/>
-                        <Route path='/tenants' exact={true} element={<TenantList />}/>
-                        <Route path='/tenants/:id' element={<TenantDetails />}/>
-                        <Route path='/tenants/edit/:id' element={<TenantEdit />}/>
-                        <Route path='/rent-payments' exact={true} element={<RentPaymentHome />}/>
-                        <Route path='/rent-payments/:id' element={<RentPaymentEdit />}/>
-                        <Route path='/expenses' exact={true} element={<ExpenseHome />}/>
-                        <Route path='/expenses/:id' element={<ExpenseEdit />}/>
+                        {/* Public routes */}
+                        <Route path='/login' element={<LoginForm />}/>
+                        <Route path='/signup' element={<SignupForm />}/>
+
+                        {/* Protected routes */}
+                        <Route element={<RequireAuth />}>
+                            <Route path='/' exact={true} element={<LeaseHome />}/>
+                            <Route path='/expense-types' exact={true} element={<ExpenseTypeList />}/>
+                            <Route path='/expense-types/:id' element={<ExpenseTypeEdit />}/>
+                            <Route path='/properties' exact={true} element={<PropertyList />}/>
+                            <Route path='/properties/:id' element={<PropertyEdit />}/>
+                            <Route path='/leases' exact={true} element={<LeaseHome />}/>
+                            <Route path='/leases/:id' element={<LeaseEdit />}/>
+                            <Route path='/tenants' exact={true} element={<TenantList />}/>
+                            <Route path='/tenants/:id' element={<TenantDetails />}/>
+                            <Route path='/tenants/edit/:id' element={<TenantEdit />}/>
+                            <Route path='/rent-payments' exact={true} element={<RentPaymentHome />}/>
+                            <Route path='/rent-payments/:id' element={<RentPaymentEdit />}/>
+                            <Route path='/expenses' exact={true} element={<ExpenseHome />}/>
+                            <Route path='/expenses/:id' element={<ExpenseEdit />}/>
+                            <Route path='/admin' exact={true} element={<AdminHome />}/>
+                        </Route>
                     </Route>
                 </Routes>
             </BrowserRouter>

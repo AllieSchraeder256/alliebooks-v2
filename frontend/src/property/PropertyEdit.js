@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { Button, Form, FormGroup, Input, Label, ButtonGroup } from 'reactstrap';
+import { Button, Container, Form, FormGroup, Input, Label, ButtonGroup } from 'reactstrap';
 import HelpText from '../components/HelpText';
+import { apiFetch } from '../utils/api';
 
 const emptyProperty = {
     name: '',
@@ -22,7 +23,7 @@ const PropertyEdit = () => {
 
     const loadProperty = async (id) => {
         if (id !== 'new') {
-            const property = await (await fetch(`/properties/${id}`)).json();
+            const property = await (await apiFetch(`/properties/${id}`)).json();
             setProperty(property);
             setUnitCount(property.units.length || 1);
         } else {
@@ -75,7 +76,7 @@ const PropertyEdit = () => {
     }
 
     async function saveProperty() {
-        await fetch('/properties' + (property.id ? '/' + property.id : ''), {
+        await apiFetch('/properties' + (property.id ? '/' + property.id : ''), {
             method: (property.id) ? 'PUT' : 'POST',
             headers: {
                 'Accept': 'application/json',

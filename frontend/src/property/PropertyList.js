@@ -8,6 +8,7 @@ import {
     CardTitle
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { apiFetch } from '../utils/api';
 
 const PropertyList = () => {
     const [properties, setProperties] = useState('');
@@ -17,12 +18,12 @@ const PropertyList = () => {
     }, []);
 
     const loadProperties = async () => {
-        const properties = await (await fetch(`/properties`)).json();
+        const properties = await (await apiFetch(`/properties`)).json();
         setProperties(properties);
     }
 
     async function remove(id) {
-        await fetch(`/properties/${id}`, {
+        await apiFetch(`/properties/${id}`, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
@@ -30,7 +31,7 @@ const PropertyList = () => {
             }
         }).then(() => {
             const updatedProperties = [...properties].filter(i => i.id !== id);
-            setProperties(props => ({...props, properties: updatedProperties}));
+            setProperties(updatedProperties);
         });
     }
 

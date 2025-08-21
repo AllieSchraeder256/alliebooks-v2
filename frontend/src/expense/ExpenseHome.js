@@ -6,6 +6,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import ExpenseTable from './ExpenseTable';
 import ImageUploadModal from '../components/ImageUploadModal';
 import moment from 'moment';
+import { apiFetch } from '../utils/api';
 
 const ExpenseHome = () => {
     const animatedComponents = makeAnimated();
@@ -91,17 +92,17 @@ const ExpenseHome = () => {
             if (filters.searchText) {
                 url += `&searchText=${encodeURIComponent(filters.searchText)}`;
             }
-            const expenses = await (await fetch(url)).json();
+            const expenses = await (await apiFetch(url)).json();
             setExpenses(expenses);
         }
     }
 
     const loadProperties = async () => {
-        const properties = await (await fetch('/properties')).json();
+        const properties = await (await apiFetch('/properties')).json();
         setProperties(properties);
     }
     const loadExpenseTypes = async () => {
-        const expenseTypes = await (await fetch('/expense-types')).json();
+        const expenseTypes = await (await apiFetch('/expense-types')).json();
         setExpenseTypes(expenseTypes);
     }
 

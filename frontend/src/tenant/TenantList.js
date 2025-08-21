@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, ButtonGroup, Table } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import LeaseCard from '../lease/LeaseCard';
+import { apiFetch } from '../utils/api';
 
 const TenantList = () => {
 
@@ -12,11 +13,11 @@ const [tenants, setTenants] = useState('');
     }, []);
 
     const loadTenants = async () => {
-        const tenants = await (await fetch(`/tenants`)).json();
+        const tenants = await (await apiFetch(`/tenants`)).json();
         setTenants(tenants);
     }
     async function remove(id) {
-        await fetch(`/tenants/${id}`, {
+        await apiFetch(`/tenants/${id}`, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',

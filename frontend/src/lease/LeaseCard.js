@@ -18,6 +18,7 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import RentPaymentTable from '../rent-payment/RentPaymentTable';
 import Notes from '../components/Notes';
+import { apiFetch } from '../utils/api';
 
 const LeaseCard = ({lease}) => {
     const [rentPayments, setRentPayments] = useState([]);
@@ -36,7 +37,7 @@ const LeaseCard = ({lease}) => {
     }, []);
 
     const loadRentPayments = async (leaseId) => {
-        const payments = await (await fetch(`/rent-payments?leaseId=${leaseId}`)).json();
+        const payments = await (await apiFetch(`/rent-payments?leaseId=${leaseId}`)).json();
         setRentPayments(payments);
     }
 

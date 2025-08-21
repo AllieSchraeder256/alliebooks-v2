@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
+import { apiFetch } from './utils/api';
 
 const emptyExpenseType = {
     name: ''
@@ -18,7 +19,7 @@ const ExpenseTypeEdit = () => {
 
     const loadExpenseType = async (id) => {
         if (id !== 'new') {
-            const expenseType = await (await fetch(`/expense-types/${id}`)).json();
+            const expenseType = await (await apiFetch(`/expense-types/${id}`)).json();
             setExpenseType(expenseType);
         } else {
             setExpenseType(emptyExpenseType);
@@ -40,7 +41,7 @@ const ExpenseTypeEdit = () => {
     }
 
     async function saveExpenseType() {
-        await fetch('/expense-types' + (expenseType.id ? '/' + expenseType.id : ''), {
+        await apiFetch('/expense-types' + (expenseType.id ? '/' + expenseType.id : ''), {
             method: (expenseType.id) ? 'PUT' : 'POST',
             headers: {
                 'Accept': 'application/json',

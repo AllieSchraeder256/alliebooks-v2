@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { apiFetch } from '../utils/api';
 
 const ImageViewModal = ({ resourceId, buttonLabel = "Image" }) => {
     const [modalOpen, setModalOpen] = useState(false);
@@ -11,7 +12,7 @@ const ImageViewModal = ({ resourceId, buttonLabel = "Image" }) => {
         setModalOpen(true);
         setLoading(true);
         setSourceImage(null);
-        const res = await fetch(`/images?resourceId=${resourceId}`);
+        const res = await apiFetch(`/images?resourceId=${resourceId}`);
         if (res.ok) {
             const image = await res.json();
             setSourceImage(image);

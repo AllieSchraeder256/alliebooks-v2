@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, ButtonGroup, Table } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import LeaseCard from './LeaseCard';
+import { apiFetch } from '../utils/api';
 
 const LeaseHome = () => {
 
@@ -14,11 +15,11 @@ const [oldLeases, setOldLeases] = useState('');
     }, []);
 
     const loadLeases = async () => {
-        const leases = await (await fetch(`/leases/current-leases`)).json();
+        const leases = await (await apiFetch(`/leases/current-leases`)).json();
         setLeases(leases);
     }
     const loadOldLeases = async () => {
-        const oldLeases = await (await fetch(`/leases/old-leases`)).json();
+        const oldLeases = await (await apiFetch(`/leases/old-leases`)).json();
         setOldLeases(oldLeases);
     }
 

@@ -4,6 +4,7 @@ import { Button, Container, Form, FormGroup, Input, Label, Row, Col } from 'reac
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
 import moment from 'moment';
+import { apiFetch } from '../utils/api';
 
 const emptyLease = {
     rent: null,
@@ -44,12 +45,12 @@ const LeaseEdit = () => {
     }, []);
 
     const loadTenants = async () => {
-        const tenants = await (await fetch(`/tenants`)).json();
+        const tenants = await (await apiFetch(`/tenants`)).json();
         setTenants(tenants);
     }
 
     const loadLease = async (id) => {
-        const getLease = await (await fetch(`/leases/${id}`)).json();
+        const getLease = await (await apiFetch(`/leases/${id}`)).json();
         setLoadedLease(getLease);
         console.log('loading lease '+ loadedLease);
 
@@ -72,7 +73,7 @@ const LeaseEdit = () => {
         setLease(lease);
     }
     const loadProperties = async (id) => {
-        const properties = await (await fetch(`/properties`)).json();
+        const properties = await (await apiFetch(`/properties`)).json();
         setProperties(properties);
         if (properties.length > 0 && properties[0].units) {
             setUnits(properties[0].units);
@@ -133,7 +134,7 @@ const LeaseEdit = () => {
     }
 
     async function saveLease() {
-        await fetch('/leases' + (lease.id ? '/' + lease.id : ''), {
+        await apiFetch('/leases' + (lease.id ? '/' + lease.id : ''), {
             method: (lease.id) ? 'PUT' : 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -146,7 +147,7 @@ const LeaseEdit = () => {
     }
 
     async function remove(id) {
-        await fetch(`/leases/${id}`, {
+        await apiFetch(`/leases/${id}`, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',

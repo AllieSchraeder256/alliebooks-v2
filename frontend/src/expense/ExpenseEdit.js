@@ -6,6 +6,7 @@ import makeAnimated from 'react-select/animated';
 import moment from 'moment';
 import HelpText from '../components/HelpText';
 import ImageUploadModal from '../components/ImageUploadModal';
+import { apiFetch } from '../utils/api';
 
 const emptyExpense = {
     amount: 0,
@@ -57,22 +58,22 @@ const ExpenseEdit = () => {
     }, [location.state]);
 
     const loadExpense = async (id) => {
-        const expense = await (await fetch(`/expenses/${id}`)).json();
+        const expense = await (await apiFetch(`/expenses/${id}`)).json();
         setExpense(expense);
 
         if (expense.hasImage) {
             console.log('Loading image for expense with id:', id);
-            const imageData = await (await fetch(`/images?resourceId=${id}`)).json();
+            const imageData = await (await apiFetch(`/images?resourceId=${id}`)).json();
             setImage(imageData);
         }
     }
     const loadExpenseTypes = async () => {
-        const expenseTypes = await (await fetch(`/expense-types`)).json();
+        const expenseTypes = await (await apiFetch(`/expense-types`)).json();
         setExpenseTypes(expenseTypes);
     }
 
     const loadProperties = async () => {
-        const properties = await (await fetch(`/properties`)).json();
+        const properties = await (await apiFetch(`/properties`)).json();
         setProperties(properties);
     }
     const processImage = async (file) => {
@@ -80,7 +81,7 @@ const ExpenseEdit = () => {
         const formData = new FormData();
         formData.append("file", file);
 
-        const response = await(await fetch('/images/ocr', {
+        const response = await(await apiFetch('/images/ocr', {
             method: 'POST',
             body: formData,
         })).json();
@@ -148,7 +149,7 @@ const ExpenseEdit = () => {
         formData.append("expense", new Blob([JSON.stringify(expense)], { type: "application/json" }));
         formData.append("imageFile", updatedImageFile);
 
-        await fetch('/expenses' + (expense.id ? '/' + expense.id : ''), {
+        await apiFetch('/expenses' + (expense.id ? '/' + expense.id : ''), {
             method: (expense.id) ? 'PUT' : 'POST',
             body: formData,
         }).then(() => {
@@ -158,7 +159,7 @@ const ExpenseEdit = () => {
     }
 
     async function remove(id) {
-        await fetch(`/expenses/${id}`, {
+        await apiFetch(`/expenses/${id}`, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',

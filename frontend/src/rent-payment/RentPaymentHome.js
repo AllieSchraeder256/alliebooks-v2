@@ -6,6 +6,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import LeaseCard from '../lease/LeaseCard';
 import RentPaymentTable from './RentPaymentTable';
 import moment from 'moment';
+import { apiFetch } from '../utils/api';
 
 const RentPaymentHome = () => {
     const animatedComponents = makeAnimated();
@@ -62,13 +63,13 @@ const RentPaymentHome = () => {
             const url = filters.leaseId == '' ?
                 `/rent-payments?start=${filters.startDate}&end=${filters.endDate}`
                 : `/rent-payments?start=${filters.startDate}&end=${filters.endDate}&leaseId=${filters.leaseId}`;
-            const rentPayments = await (await fetch(url)).json();
+            const rentPayments = await (await apiFetch(url)).json();
             setRentPayments(rentPayments);
         }
     }
 
     const loadCurrentLeaseSummary = async () => {
-        const leaseSummary = await (await fetch('/leases/current-lease-summary')).json();
+        const leaseSummary = await (await apiFetch('/leases/current-lease-summary')).json();
         setCurrentLeaseSummary(leaseSummary);
     }
 

@@ -5,6 +5,7 @@ import Select from 'react-select'
 import LeaseCard from '../lease/LeaseCard';
 import HelpText from '../components/HelpText';
 import Notes from '../components/Notes';
+import { apiFetch } from '../utils/api';
 
 const TenantDetails = () => {
     const id = useParams().id;
@@ -17,7 +18,7 @@ const TenantDetails = () => {
     }, []);
 
     const loadTenant = async (id) => {
-        const tenant = await (await fetch(`/tenants/${id}`)).json();
+        const tenant = await (await apiFetch(`/tenants/${id}`)).json();
         setTenant(tenant);
     }
 

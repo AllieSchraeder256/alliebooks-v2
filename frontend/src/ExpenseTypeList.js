@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, ButtonGroup, Table } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { apiFetch } from './utils/api';
 
 const ExpenseTypeList = () => {
 
@@ -11,7 +12,7 @@ const [expenseTypes, setExpenseTypes] = useState('');
     }, []);
 
     const loadExpenseTypes = async () => {
-        const expenseTypes = await (await fetch(`/expense-types`)).json();
+        const expenseTypes = await (await apiFetch(`/expense-types`)).json();
         setExpenseTypes(expenseTypes);
     }
 
