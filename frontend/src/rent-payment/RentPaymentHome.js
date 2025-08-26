@@ -117,11 +117,11 @@ const RentPaymentHome = () => {
 
     return (
         <>
-        <div className="float-right">
+        <div className="d-flex justify-content-between align-items-center mb-2">
+            <h3 className="mb-0">Rent Payments</h3>
             <Button color="success" tag={Link} to="/rent-payments/new">New Payment</Button>
         </div>
         <Row className = "row-cols-sm-auto align-items-center">
-            <h3>Rent Payments</h3>
             <FormGroup switch>
                 <Input type="switch" role="switch" id="searchTypeSelect" onChange={handleSearchTypeSwitch} />
                 <UncontrolledTooltip target="searchTypeSelect">

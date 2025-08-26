@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, Spinner } from 'reactstrap';
 import ReactCrop, { type Crop } from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
 
-const ImageModal = ({from, buttonText, buttonColor, onImageSelected}) => {
+const ImageModal = ({from, buttonText, buttonColor, onImageSelected, isProcessing = false}) => {
     const [modalOpen, setModalOpen] = useState(false);
     const [sourceImage, setSourceImage] = useState(null);
     const [crop, setCrop] = useState();
@@ -79,8 +79,10 @@ const ImageModal = ({from, buttonText, buttonColor, onImageSelected}) => {
         <>
             <Button
                 color={buttonColor || "warning"}
-                onClick={() => fileInputRef.current.click()}>
-                {buttonText || 'Upload Image'}
+                onClick={() => !isProcessing && fileInputRef.current.click()}
+                disabled={isProcessing}
+            >
+                {isProcessing ? (<><Spinner size="sm" className="me-2" /> Processing</>) : (buttonText || 'Upload Image')}
             </Button>
             <input onChange={handleShowImage} multiple={false} ref={fileInputRef} type="file" hidden/>
 

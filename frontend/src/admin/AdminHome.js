@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Container, Table, Row, Col } from 'reactstrap';
 import SignupForm from '../components/SignupForm';
 import { apiFetch } from '../utils/api';
+import OcrTokenList from './OcrTokenList';
 
 const AdminHome = () => {
     const [users, setUsers] = useState([]);
@@ -43,6 +44,10 @@ const AdminHome = () => {
                 <Col md={6}>
                     <SignupForm />
                 </Col>
+            </Row>
+            <hr />
+            <Row>
+                <OcrTokenList />
             </Row>
 
         </Container>

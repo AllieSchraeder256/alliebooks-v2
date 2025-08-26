@@ -43,7 +43,7 @@ public class ExpenseTypeController {
         var currentExpenseType = expenseTypeService.findById(id)
                     .orElseThrow(RuntimeException::new);
         currentExpenseType.setName(expenseType.getName());
-        currentExpenseType = expenseTypeService.save(expenseType);
+        currentExpenseType = expenseTypeService.save(currentExpenseType);
 
         return ResponseEntity.ok(currentExpenseType);
     }

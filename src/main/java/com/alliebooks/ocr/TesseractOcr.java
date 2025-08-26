@@ -5,6 +5,7 @@ import org.apache.tika.Tika;
 import org.apache.tika.mime.MimeType;
 import org.apache.tika.mime.MimeTypeException;
 import org.apache.tika.mime.MimeTypes;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +22,9 @@ public class TesseractOcr {
     public static final String TRAINING_DATA_PATH = "src/main/resources/tessdata";
     private static Tika tika;
     private final Tesseract tesseract;
+
+    @Autowired
+    private OcrParser ocrParser;
 
     public TesseractOcr() {
         tika = new Tika();
@@ -39,7 +43,7 @@ public class TesseractOcr {
             String result = tesseract.doOCR(file);
 
             logger.info(String.format("Read image text=[%s]", result));
-            return new ReceiptData(result);
+            return ocrParser.parse(result);
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Can't create temp file for input stream", e);
             return null;

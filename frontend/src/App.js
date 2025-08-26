@@ -3,8 +3,8 @@ import './App.css';
 import Home from './Home';
 import AppNavbar from './AppNavbar';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import ExpenseTypeList from './ExpenseTypeList';
-import ExpenseTypeEdit from "./ExpenseTypeEdit";
+import ExpenseTypeList from './admin/ExpenseTypeList';
+import ExpenseTypeEdit from "./admin/ExpenseTypeEdit";
 import PropertyList from './property/PropertyList';
 import PropertyEdit from "./property/PropertyEdit";
 import LeaseHome from "./lease/LeaseHome";
@@ -20,6 +20,8 @@ import SignupForm from './components/SignupForm';
 import AdminHome from "./admin/AdminHome";
 import LoginForm from './components/LoginForm';
 import RequireAuth from './components/RequireAuth';
+import OcrTokenList from './admin/OcrTokenList';
+import OcrTokenEdit from './admin/OcrTokenEdit';
 
 function App() {
     return (
@@ -48,6 +50,8 @@ function App() {
                             <Route path='/expenses' exact={true} element={<ExpenseHome />}/>
                             <Route path='/expenses/:id' element={<ExpenseEdit />}/>
                             <Route path='/admin' exact={true} element={<AdminHome />}/>
+                            <Route path='/ocr-tokens' exact={true} element={<OcrTokenList />}/>
+                            <Route   path='/ocr-tokens/:id' element={<OcrTokenEdit />}/>
                         </Route>
                     </Route>
                 </Routes>

@@ -17,4 +17,8 @@ public class ExpenseType extends BaseModel {
 	@JsonIgnore
 	@OneToMany(mappedBy="expenseType")
 	private List<Expense> expenses;
+
+	@JsonIgnore
+	@OneToMany(mappedBy="expenseType")
+	private List<OcrToken> ocrTokens;
 }

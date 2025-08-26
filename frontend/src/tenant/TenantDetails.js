@@ -37,16 +37,16 @@ const TenantDetails = () => {
     return (
         <>
         <div >
-            <div className="float-right">
+            <div className="d-flex justify-content-between align-items-center mb-2">
+                <h3 className="mb-0">{tenant.firstName} {tenant.lastName}</h3>
                 <ButtonGroup>
                     <Button size="sm" color="primary" tag={Link} to={"/tenants/edit/" + tenant.id}>Edit</Button>
                     <Button size="sm" disabled={tenant.tenantLeases && tenant.tenantLeases.length > 0} color="danger" onClick={() => remove(tenant.id)}>Delete</Button>
                 </ButtonGroup>
-                {tenant.tenantLeases && tenant.tenantLeases.length > 0 &&
-                    <HelpText text="Cannot delete tenants with leases. Delete the leases first." />
-                }
             </div>
-            <h3>{tenant.firstName} {tenant.lastName}</h3>
+            {tenant.tenantLeases && tenant.tenantLeases.length > 0 &&
+                <HelpText text="Cannot delete tenants with leases. Delete the leases first." />
+            }
             <Row>
                 <Col md={3}>
                     Email: {tenant.email}<br />

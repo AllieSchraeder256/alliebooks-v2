@@ -163,18 +163,18 @@ const ExpenseHome = () => {
 
     return (
         <>
-        <div className="float-right">
-            <ImageUploadModal from="expenseNew" buttonText="New Expense" buttonColor="success" />
-        </div>
-        <Row className = "row-cols-sm-auto align-items-center">
-            <h3>Expenses</h3>
-            <FormGroup switch>
+        <div className="d-flex align-items-center mb-2">
+            <h3 className="mb-0 me-2">Expenses</h3>
+            <FormGroup switch className="mb-0 me-3">
                 <Input type="switch" role="switch" id="searchTypeSelect" onChange={handleSearchTypeSwitch} />
                 <UncontrolledTooltip target="searchTypeSelect">
                     Advanced Search
                 </UncontrolledTooltip>
             </FormGroup>
-        </Row>
+            <div className="ms-auto">
+                <ImageUploadModal from="expenseNew" buttonText="New Expense" buttonColor="success" />
+            </div>
+        </div>
         { searchTypeAdvanced ? detailedFilterDiv : basicFilterDiv }
         <ExpenseTable expenses={expenses} />
         </>

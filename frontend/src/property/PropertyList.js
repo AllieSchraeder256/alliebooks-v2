@@ -39,11 +39,13 @@ const PropertyList = () => {
     const propertyList = properties && properties.map && properties.map(property => (
         <Card key={property.id}>
             <CardTitle tag="h4">
-                {property.name}
-                <ButtonGroup className="float-right">
-                    <Button size="sm" color="primary" tag={Link} to={"/properties/" + property.id}>Edit</Button>
-                    <Button size="sm" color="danger" onClick={() => remove(property.id)}>Delete</Button>
-                </ButtonGroup>
+                <div className="d-flex justify-content-between align-items-center">
+                    <span>{property.name}</span>
+                    <ButtonGroup>
+                        <Button size="sm" color="primary" tag={Link} to={"/properties/" + property.id}>Edit</Button>
+                        <Button size="sm" color="danger" onClick={() => remove(property.id)}>Delete</Button>
+                    </ButtonGroup>
+                </div>
             </CardTitle>
 
 
@@ -59,10 +61,10 @@ const PropertyList = () => {
 
     return (
         <>
-        <div className="float-right">
+        <div className="d-flex justify-content-between align-items-center mb-2">
+            <h2 className="mb-0">Properties</h2>
             <Button color="success" tag={Link} to="/properties/new">Add</Button>
         </div>
-        <h2>Properties</h2>
         {propertyList}
         </>
     );

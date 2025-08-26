@@ -25,7 +25,7 @@ const [tenants, setTenants] = useState('');
             }
         }).then(() => {
             let updatedTenants = [...tenants].filter(i => i.id !== id);
-            setTenants(props => ({...props, tenants: updatedTenants}));
+            setTenants(updatedTenants);
         });
     }
 
@@ -43,10 +43,10 @@ const [tenants, setTenants] = useState('');
 
     return (
         <>
-        <div className="float-right">
+        <div className="d-flex justify-content-between align-items-center mb-2">
+            <h3 className="mb-0">Tenants</h3>
             <Button color="success" tag={Link} to="/tenants/edit/new">Add</Button>
         </div>
-        <h3>Tenants</h3>
         <Table hover>
             <thead>
                 <tr>

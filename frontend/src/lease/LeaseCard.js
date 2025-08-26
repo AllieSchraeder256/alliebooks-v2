@@ -69,10 +69,10 @@ const LeaseCard = ({lease}) => {
         <>
         <Card key={lease.id} >
             <CardTitle tag="h5">
-                <div className="float-right">
+                <div className="d-flex justify-content-between align-items-center">
+                    <span>{lease.unit.property.name} - {lease.unit.name}</span>
                     <Button outline color="primary" size="sm" tag={Link} to={"/leases/" + lease.id} >Edit</Button>
                 </div>
-                {lease.unit.property.name} - {lease.unit.name}
             </CardTitle>
             <CardBody style={{paddingBottom: '0px'}}>
 

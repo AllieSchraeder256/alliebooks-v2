@@ -25,10 +25,10 @@ const [oldLeases, setOldLeases] = useState('');
 
     return (
         <>
-        <div className="float-right">
+        <div className="d-flex justify-content-between align-items-center mb-2">
+            <h3 className="mb-0">Current Leases ({leases.length})</h3>
             <Button color="success" tag={Link} to="/leases/new">New Lease</Button>
         </div>
-        <h3>Current Leases ({leases.length})</h3>
         { leases && leases.map && leases.map(lease => {
             return <LeaseCard key={lease.id} lease={lease} />
         }) }

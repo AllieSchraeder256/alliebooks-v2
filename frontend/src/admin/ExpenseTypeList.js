@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, ButtonGroup, Table } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { apiFetch } from './utils/api';
+import { apiFetch } from '../utils/api';
 
 const ExpenseTypeList = () => {
 
@@ -17,7 +17,7 @@ const [expenseTypes, setExpenseTypes] = useState('');
     }
 
     async function remove(id) {
-        await fetch(`/expense-types/${id}`, {
+        await apiFetch(`/expense-types/${id}`, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
@@ -25,7 +25,7 @@ const [expenseTypes, setExpenseTypes] = useState('');
             }
         }).then(() => {
             let updatedExpenseTypes = [...expenseTypes].filter(i => i.id !== id);
-            setExpenseTypes(props => ({...props, expenseTypes: updatedExpenseTypes}));
+            setExpenseTypes(updatedExpenseTypes);
         });
     }
 
@@ -43,10 +43,10 @@ const [expenseTypes, setExpenseTypes] = useState('');
 
     return (
         <>
-        <div className="float-right">
+        <div className="d-flex justify-content-between align-items-center mb-2">
+            <h3 className="mb-0">Expense Types</h3>
             <Button color="success" tag={Link} to="/expense-types/new">New Type</Button>
         </div>
-        <h3>Expense Types</h3>
         <Table hover>
             <thead>
                 <tr>

@@ -4,7 +4,6 @@ import { Button, Container, Form, FormGroup, Input, Label, Row, Col } from 'reac
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
 import moment from 'moment';
-import HelpText from '../components/HelpText';
 import ImageUploadModal from '../components/ImageUploadModal';
 import { apiFetch } from '../utils/api';
 
@@ -101,6 +100,10 @@ const ExpenseEdit = () => {
             updatedExpense.merchant = response.merchant;
             updatedHighlights.merchant = true;
         }
+        if (response.expenseTypeId) {
+            updatedExpense.expenseTypeId = response.expenseTypeId;
+            updatedHighlights.expenseTypeId = true;
+        }
         setReceiptData(response);
         setExpense(updatedExpense);
         setHighlightedFields(updatedHighlights);
@@ -120,6 +123,7 @@ const ExpenseEdit = () => {
     }
     function setSelectedType(choice) {
         expense.expenseTypeId = choice ? choice.value : '';
+        setHighlightedFields({ ...highlightedFields, expenseTypeId: false });
         setExpense({...expense});
     }
 
@@ -179,6 +183,10 @@ const ExpenseEdit = () => {
                     <Row>
                         <Col md={4}>
                             <FormGroup>
+                                <Label for="merchant">Merchant</Label>
+                                <Input className={highlightedFields.merchant ? 'highlight' : ''} type="text" name="merchant" id="merchant" value={expense.merchant || ''} onChange={handleChange} />
+                            </FormGroup>
+                            <FormGroup>
                                 <Label for="amount">Amount</Label>
                                 <Input className={highlightedFields.amount ? 'highlight' : ''} type="number" name="amount" id="amount" value={expense.amount || ''} onChange={handleChange} />
                             </FormGroup>
@@ -187,17 +195,13 @@ const ExpenseEdit = () => {
                                 <Input className={highlightedFields.paidOn ? 'highlight' : ''} type="date" name="paidOn" id="paidOn" value={expense.paidOn || ''} onChange={handleChange} />
                             </FormGroup>
                             <FormGroup>
-                                <Label for="merchant">Merchant</Label>
-                                <Input className={highlightedFields.merchant ? 'highlight' : ''} type="text" name="merchant" id="merchant" value={expense.merchant || ''} onChange={handleChange} />
-                            </FormGroup>
-                            <FormGroup>
                                 <ImageUploadModal
                                     from = "expenseEdit"
+                                    isProcessing={imageIsProcessing}
                                     onImageSelected={file => {
                                         setUpdatedImageFile(file);
                                         processImage(file);
                                 }}/>
-                                {imageIsProcessing && <HelpText text="Processing image, please wait..." />}
                                 <Input
                                     id="imagePath"
                                     name="imagePath"
@@ -234,7 +238,13 @@ const ExpenseEdit = () => {
                                           value = {expenseTypeOptions ? expenseTypeOptions.find(option => option.value === expense.expenseTypeId) : null}
                                           placeholder="Expense Type"
                                           backspaceRemovesValue
-                                          isClearable />
+                                          isClearable
+                                          styles={{
+                                              control: (baseStyles, state) => ({
+                                                ...baseStyles,
+                                                borderColor: highlightedFields.expenseTypeId ? 'blue' : baseStyles.borderColor
+                                              }),
+                                          }}/>
                             </FormGroup>
                             <FormGroup>
                                 <Label for="note">Note</Label>
@@ -256,3 +266,4 @@ const ExpenseEdit = () => {
 }
 
 export default ExpenseEdit;
+
