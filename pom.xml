@@ -12,6 +12,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Alliebooks-v2</name>
 	<description>Alliebooks Version 2</description>
+	<packaging>war</packaging>
 
 	<properties>
 		<java.version>24</java.version>
@@ -19,7 +20,6 @@
 		<jwt.version>0.12.6</jwt.version>
 		<frontend-src-dir>${project.basedir}/src/main/frontend</frontend-src-dir>
 		<node.version>v12.3.1</node.version>
-		<yarn.version>v1.16.0</yarn.version>
 		<frontend-maven-plugin.version>1.7.6</frontend-maven-plugin.version>
 	</properties>
 
@@ -137,7 +137,6 @@
 
 				<configuration>
 					<nodeVersion>${node.version}</nodeVersion>
-					<yarnVersion>${yarn.version}</yarnVersion>
 					<workingDirectory>${frontend-src-dir}</workingDirectory>
 					<installDirectory>${project.build.directory}</installDirectory>
 				</configuration>
@@ -146,14 +145,14 @@
 					<execution>
 						<id>install-frontend-tools</id>
 						<goals>
-							<goal>install-node-and-yarn</goal>
+							<goal>install-node-and-npm</goal>
 						</goals>
 					</execution>
 
 					<execution>
-						<id>yarn-install</id>
+						<id>npm-install</id>
 						<goals>
-							<goal>yarn</goal>
+							<goal>npm</goal>
 						</goals>
 						<configuration>
 							<arguments>install</arguments>
@@ -163,11 +162,11 @@
 					<execution>
 						<id>build-frontend</id>
 						<goals>
-							<goal>yarn</goal>
+							<goal>npm</goal>
 						</goals>
 						<phase>prepare-package</phase>
 						<configuration>
-							<arguments>build</arguments>
+							<arguments>run build</arguments>
 						</configuration>
 					</execution>
 				</executions>
