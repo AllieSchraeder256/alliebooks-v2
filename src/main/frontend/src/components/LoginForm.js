@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Form, FormGroup, Input, Label, Alert, Spinner } from 'reactstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { apiFetch } from '../utils/api';
 
 const LoginForm = () => {
   const [name, setName] = useState('');
@@ -23,7 +24,7 @@ const LoginForm = () => {
 
     try {
       setLoading(true);
-      const res = await fetch('/auth/login', {
+      const res = await apiFetch('/auth/login', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -91,4 +92,3 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
-

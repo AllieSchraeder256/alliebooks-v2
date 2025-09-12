@@ -23,7 +23,7 @@ const TenantDetails = () => {
     }
 
     async function remove(id) {
-        await fetch(`/tenants/${id}`, {
+        await apiFetch(`/tenants/${id}`, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',

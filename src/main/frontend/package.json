@@ -25,12 +25,36 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint 'src/**/*.{js,jsx}'"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
+    ],
+    "rules": {
+      "no-restricted-syntax": [
+        "error",
+        {
+          "selector": "CallExpression[callee.name='fetch']",
+          "message": "Use apiFetch from utils/api instead of fetch."
+        }
+      ]
+    },
+    "overrides": [
+      {
+        "files": ["src/utils/api.js"],
+        "rules": {
+          "no-restricted-syntax": "off"
+        }
+      },
+      {
+        "files": ["**/*.test.js", "**/*.test.jsx"],
+        "rules": {
+          "no-restricted-syntax": "off"
+        }
+      }
     ]
   },
   "browserslist": {

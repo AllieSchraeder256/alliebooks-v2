@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Form, FormGroup, Input, Label, Alert, Spinner } from 'reactstrap';
+import { apiFetch } from '../utils/api';
 
 const SignupForm = () => {
   const [name, setName] = useState('');
@@ -20,7 +21,7 @@ const SignupForm = () => {
 
     try {
       setLoading(true);
-      const res = await fetch('/auth/signup', {
+      const res = await apiFetch('/auth/signup', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -82,4 +83,3 @@ const SignupForm = () => {
 };
 
 export default SignupForm;
-

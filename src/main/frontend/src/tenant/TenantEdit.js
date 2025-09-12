@@ -40,7 +40,7 @@ const TenantEdit = () => {
     }
 
     async function saveTenant() {
-        await fetch('/tenants' + (tenant.id ? '/' + tenant.id : ''), {
+        await apiFetch('/tenants' + (tenant.id ? '/' + tenant.id : ''), {
             method: (tenant.id) ? 'PUT' : 'POST',
             headers: {
                 'Accept': 'application/json',
