@@ -52,7 +52,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
             filterChain.doFilter(request, response);
         } catch (Exception e) {
-            logger.error("Bad stuff", e);
+            logger.error(String.format("Auth filter stopped request %s %s", request.getMethod(), request.getRequestURL()), e);
             SecurityContextHolder.clearContext();
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");

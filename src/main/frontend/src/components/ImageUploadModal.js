@@ -57,6 +57,7 @@ const ImageModal = ({from, buttonText, buttonColor, onImageSelected, isProcessin
 
     function doStuff() {
         if (completedCrop && croppedImageUrl) {
+            //eslint-disable-next-line no-restricted-syntax
             fetch(croppedImageUrl)
                 .then(res => res.blob())
                 .then(blob => {
