@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Modal, ModalHeader, ModalBody, Spinner } from 'reactstrap';
-import ReactCrop, { type Crop } from 'react-image-crop'
+import ReactCrop from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
 
 const ImageModal = ({from, buttonText, buttonColor, onImageSelected, isProcessing = false}) => {

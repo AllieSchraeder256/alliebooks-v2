@@ -1,7 +1,6 @@
 import {
     UncontrolledTooltip
 } from 'reactstrap';
-import { Link } from 'react-router-dom';
 
 const HelpText = (text) => {
     return (

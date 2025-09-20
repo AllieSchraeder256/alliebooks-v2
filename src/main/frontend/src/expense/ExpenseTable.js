@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Button, ButtonGroup, Table } from 'reactstrap';
+import React from 'react';
+import { Button, Table } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import ImageViewModal from '../components/ImageViewModal';
 

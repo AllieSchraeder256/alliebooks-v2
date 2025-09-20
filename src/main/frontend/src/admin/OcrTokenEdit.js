@@ -21,7 +21,7 @@ const OcrTokenEdit = () => {
 
     useEffect(() => {
         loadOcrToken(id);
-    }, []);
+    }, [id]);
 
     const loadOcrToken = async (id) => {
         if (id !== 'new') {
@@ -32,6 +32,7 @@ const OcrTokenEdit = () => {
         }
         loadExpenseTypes();
     }
+
     const loadExpenseTypes = async () => {
         const expenseTypes = await (await apiFetch(`/expense-types`)).json();
         setExpenseTypes(expenseTypes);

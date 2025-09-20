@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Table, Row, Col } from 'reactstrap';
 import SignupForm from '../components/SignupForm';
 import { apiFetch } from '../utils/api';

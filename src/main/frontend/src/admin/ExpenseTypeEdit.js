@@ -15,7 +15,7 @@ const ExpenseTypeEdit = () => {
 
     useEffect(() => {
         loadExpenseType(id);
-    }, []);
+    }, [id]);
 
     const loadExpenseType = async (id) => {
         if (id !== 'new') {

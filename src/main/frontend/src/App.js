@@ -1,6 +1,5 @@
 import React from 'react';
 import './App.css';
-import Home from './Home';
 import AppNavbar from './AppNavbar';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ExpenseTypeList from './admin/ExpenseTypeList';
