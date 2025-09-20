@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { Button, Container, ButtonGroup, UncontrolledTooltip, Row, Col } from 'reactstrap';
-import Select from 'react-select'
+import { Button, ButtonGroup, Row, Col } from 'reactstrap';
 import LeaseCard from '../lease/LeaseCard';
 import HelpText from '../components/HelpText';
 import Notes from '../components/Notes';
@@ -15,7 +14,7 @@ const TenantDetails = () => {
 
     useEffect(() => {
         loadTenant(id);
-    }, []);
+    });
 
     const loadTenant = async (id) => {
         const tenant = await (await apiFetch(`/tenants/${id}`)).json();

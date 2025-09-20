@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Button, ButtonGroup, Table, Input, Label, Row, Col, FormGroup, Checkbox, UncontrolledTooltip, FormFeedback } from 'reactstrap';
+import { Button, Input, Row, Col, FormGroup, UncontrolledTooltip } from 'reactstrap';
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import ExpenseTable from './ExpenseTable';
 import ImageUploadModal from '../components/ImageUploadModal';
 import moment from 'moment';
@@ -33,7 +33,7 @@ const ExpenseHome = () => {
         loadExpenses(filters);
         loadExpenseTypes();
         loadProperties();
-    }, []);
+    }, [filters]);
 
     const propertyOptions = properties && properties.map && properties.map(property => {
         return { value: property.id, label: property.name };

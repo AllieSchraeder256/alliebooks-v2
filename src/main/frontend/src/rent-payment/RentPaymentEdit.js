@@ -28,11 +28,11 @@ const RentPaymentEdit = () => {
     const navigate = useNavigate();
 
     const leaseId = searchParams.get('leaseId');
-    const title = <h2>{id != 'new' ? 'Edit Rent Payment' : 'Add Rent Payment'}</h2>;
+    const title = <h2>{id !== 'new' ? 'Edit Rent Payment' : 'Add Rent Payment'}</h2>;
 
     useEffect(() => {
     console.log('useEffect called with id:', id);
-        if (id != 'new') {
+        if (id !== 'new') {
             loadRentPayment(id);
         }
         if (leaseId) {
@@ -41,7 +41,7 @@ const RentPaymentEdit = () => {
         if (currentLeaseSummary.length === 0) {
             loadCurrentLeaseSummary();
         }
-    }, []);
+    }, [id, leaseId]);
 
     const loadRentPayment = async (id) => {
         const rentPayment = await (await apiFetch(`/rent-payments/${id}`)).json();

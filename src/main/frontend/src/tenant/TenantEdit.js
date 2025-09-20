@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { Button, Form, FormGroup, Input, Label, ButtonGroup, Row, Col } from 'reactstrap';
+import { Button, Form, FormGroup, Input, Label, Row, Col } from 'reactstrap';
 import { apiFetch } from '../utils/api';
 
 const emptyTenant = {
@@ -18,7 +18,7 @@ const TenantEdit = () => {
 
     useEffect(() => {
         loadTenant(id);
-    }, []);
+    });
 
     const loadTenant = async (id) => {
         if (id !== 'new') {

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import {
     Button,
     ButtonGroup,
-    Table,
     Card,
     CardBody,
     CardTitle

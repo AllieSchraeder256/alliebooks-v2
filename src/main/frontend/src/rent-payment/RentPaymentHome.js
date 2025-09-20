@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Button, ButtonGroup, Table, Input, Label, Row, Col, FormGroup, Checkbox, UncontrolledTooltip, FormFeedback } from 'reactstrap';
+import { Button, Input, Row, Col, FormGroup, UncontrolledTooltip } from 'reactstrap';
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
 import { Link, useSearchParams } from 'react-router-dom';
-import LeaseCard from '../lease/LeaseCard';
 import RentPaymentTable from './RentPaymentTable';
 import moment from 'moment';
 import { apiFetch } from '../utils/api';
@@ -28,7 +27,7 @@ const RentPaymentHome = () => {
     useEffect(() => {
         loadRentPayments(filters);
         loadCurrentLeaseSummary();
-    }, []);
+    }, [filters]);
 
     const currentLeaseOptions = currentLeaseSummary && currentLeaseSummary.map(leaseSummary => {
         return { value: leaseSummary.leaseId, label: leaseSummary.details };
@@ -60,7 +59,7 @@ const RentPaymentHome = () => {
 
     const loadRentPayments = async (filters) => {
         if (filters.startDate && filters.endDate) {
-            const url = filters.leaseId == '' ?
+            const url = filters.leaseId === '' ?
                 `/rent-payments?start=${filters.startDate}&end=${filters.endDate}`
                 : `/rent-payments?start=${filters.startDate}&end=${filters.endDate}&leaseId=${filters.leaseId}`;
             const rentPayments = await (await apiFetch(url)).json();

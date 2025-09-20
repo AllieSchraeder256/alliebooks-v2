@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { Button, Container, Form, FormGroup, Input, Label, ButtonGroup } from 'reactstrap';
+import { Button, Form, FormGroup, Input, Label, ButtonGroup } from 'reactstrap';
 import HelpText from '../components/HelpText';
 import { apiFetch } from '../utils/api';
 
@@ -19,7 +19,7 @@ const PropertyEdit = () => {
 
     useEffect(() => {
         loadProperty(id);
-    }, []);
+    }, [id]);
 
     const loadProperty = async (id) => {
         if (id !== 'new') {

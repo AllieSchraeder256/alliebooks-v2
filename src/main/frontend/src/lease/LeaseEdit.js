@@ -3,7 +3,6 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label, Row, Col } from 'reactstrap';
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
-import moment from 'moment';
 import { apiFetch } from '../utils/api';
 
 const emptyLease = {

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Button, ButtonGroup, Table } from 'reactstrap';
+import { Button, Table } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import LeaseCard from '../lease/LeaseCard';
 import { apiFetch } from '../utils/api';
 
 const TenantList = () => {
@@ -15,18 +14,6 @@ const [tenants, setTenants] = useState('');
     const loadTenants = async () => {
         const tenants = await (await apiFetch(`/tenants`)).json();
         setTenants(tenants);
-    }
-    async function remove(id) {
-        await apiFetch(`/tenants/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        }).then(() => {
-            let updatedTenants = [...tenants].filter(i => i.id !== id);
-            setTenants(updatedTenants);
-        });
     }
 
     const tenantList = tenants && tenants.map && tenants.map(tenant => {

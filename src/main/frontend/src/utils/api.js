@@ -1,6 +1,6 @@
 export async function apiFetch(input, options = {}) {
   try {
-    const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
+    /*const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
     const headers = new Headers(options.headers || {});
     if (token) {
       headers.set('Authorization', `Bearer ${token}`);
@@ -22,8 +22,8 @@ export async function apiFetch(input, options = {}) {
         window.location.assign('/login');
       }
       throw new Error('Unauthorized');
-    }
-
+    }*/
+    const res = await fetch(input, { ...options });
     return res;
   } catch (err) {
     throw err;

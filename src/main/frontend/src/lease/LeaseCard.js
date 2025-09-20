@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
     Button,
-    ButtonGroup,
-    Table,
     Accordion,
     AccordionBody,
     AccordionHeader,
@@ -34,7 +32,7 @@ const LeaseCard = ({lease}) => {
 
     useEffect(() => {
         loadRentPayments(lease.id);
-    }, []);
+    }, [lease.id]);
 
     const loadRentPayments = async (leaseId) => {
         const payments = await (await apiFetch(`/rent-payments?leaseId=${leaseId}`)).json();

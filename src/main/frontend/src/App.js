@@ -19,7 +19,6 @@ import ExpenseEdit from "./expense/ExpenseEdit";
 import SignupForm from './components/SignupForm';
 import AdminHome from "./admin/AdminHome";
 import LoginForm from './components/LoginForm';
-import RequireAuth from './components/RequireAuth';
 import OcrTokenList from './admin/OcrTokenList';
 import OcrTokenEdit from './admin/OcrTokenEdit';
 
@@ -34,7 +33,7 @@ function App() {
                         <Route path='/signup' element={<SignupForm />}/>
 
                         {/* Protected routes */}
-                        <Route element={<RequireAuth />}>
+                        {/*<Route element={<RequireAuth />}>*/}
                             <Route path='/' exact={true} element={<LeaseHome />}/>
                             <Route path='/expense-types' exact={true} element={<ExpenseTypeList />}/>
                             <Route path='/expense-types/:id' element={<ExpenseTypeEdit />}/>
@@ -51,8 +50,8 @@ function App() {
                             <Route path='/expenses/:id' element={<ExpenseEdit />}/>
                             <Route path='/admin' exact={true} element={<AdminHome />}/>
                             <Route path='/ocr-tokens' exact={true} element={<OcrTokenList />}/>
-                            <Route   path='/ocr-tokens/:id' element={<OcrTokenEdit />}/>
-                        </Route>
+                            <Route path='/ocr-tokens/:id' element={<OcrTokenEdit />}/>
+                        {/*</Route>*/}
                     </Route>
                 </Routes>
             </BrowserRouter>

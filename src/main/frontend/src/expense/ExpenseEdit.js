@@ -36,11 +36,11 @@ const ExpenseEdit = () => {
     const location = useLocation();
     const imageProcessedRef = useRef(false);
 
-    const title = <h2>{id != 'new' ? 'Edit Expense' : 'Add Expense'}</h2>;
+    const title = <h2>{id !== 'new' ? 'Edit Expense' : 'Add Expense'}</h2>;
 
     useEffect(() => {
         console.log('expense useEffect called with id:', id);
-        if (id != 'new') {
+        if (id !== 'new') {
             loadExpense(id);
         } else if (
             location.state &&
@@ -54,7 +54,7 @@ const ExpenseEdit = () => {
 
         loadExpenseTypes();
         loadProperties();
-    }, [location.state]);
+    }, [location.state, id]);
 
     const loadExpense = async (id) => {
         const expense = await (await apiFetch(`/expenses/${id}`)).json();
