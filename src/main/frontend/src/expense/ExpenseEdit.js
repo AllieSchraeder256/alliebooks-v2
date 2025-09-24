@@ -253,8 +253,8 @@ const ExpenseEdit = () => {
                         </Col>
                         <Col md={4}>
                             {updatedImageFile ?
-                                <img style={{objectFit: 'cover', maxHeight:'800px', maxWidth:'100%'}} src={URL.createObjectURL(updatedImageFile)} alt="Image preview" />
-                                : image && <img style={{objectFit: 'cover', maxHeight:'100vh', maxWidth:'100%'}}  src={`data:image/jpeg;base64,${image.data}`} alt="Image preview" />
+                                <img style={{objectFit: 'cover', maxHeight:'800px', maxWidth:'100%'}} src={URL.createObjectURL(updatedImageFile)} alt="receipt" />
+                                : image && <img style={{objectFit: 'cover', maxHeight:'100vh', maxWidth:'100%'}}  src={`data:image/jpeg;base64,${image.data}`} alt="receipt" />
                             }
                         </Col>
                     </Row>

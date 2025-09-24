@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Modal, ModalHeader, ModalBody, Spinner } from 'reactstrap';
+import { Button, ButtonGroup, Modal, ModalHeader, ModalBody, Spinner, UncontrolledTooltip } from 'reactstrap';
 import ReactCrop from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
 
-const ImageModal = ({from, buttonText, buttonColor, onImageSelected, isProcessing = false}) => {
+const ImageModal = ({from, buttonText, buttonColor, onImageSelected, isProcessing = false, showNoImageOption = false}) => {
     const [modalOpen, setModalOpen] = useState(false);
     const [sourceImage, setSourceImage] = useState(null);
     const [crop, setCrop] = useState();
@@ -76,15 +76,38 @@ const ImageModal = ({from, buttonText, buttonColor, onImageSelected, isProcessin
         handleCloseModal();
     }
 
+    function navigateNoImage() {
+        if (from === 'expenseNew') {
+            navigate('/expenses/new');
+        } else if (from === 'rentPaymentNew') {
+            navigate('/rent-payments/new');
+        }
+    }
+
     return (
         <>
-            <Button
-                color={buttonColor || "warning"}
-                onClick={() => !isProcessing && fileInputRef.current.click()}
-                disabled={isProcessing}
-            >
-                {isProcessing ? (<><Spinner size="sm" className="me-2" /> Processing</>) : (buttonText || 'Upload Image')}
-            </Button>
+            <ButtonGroup>
+                <Button
+                    id="imageCreate"
+                    color={buttonColor || "warning"}
+                    onClick={() => !isProcessing && fileInputRef.current.click()}
+                    disabled={isProcessing}
+                >
+                    {isProcessing ? (<><Spinner size="sm" className="me-2" /> Processing</>) : (buttonText || 'Upload Image')}
+                </Button>
+                <UncontrolledTooltip target="imageCreate">
+                    Create {buttonText} from uploaded image
+                </UncontrolledTooltip>
+
+                { showNoImageOption &&
+                    <>
+                    <Button id = "skipImageCreate" color={buttonColor || "warning"} onClick={() => navigateNoImage()}>🙈</Button>
+                    <UncontrolledTooltip target="skipImageCreate">
+                        {buttonText} with no image
+                    </UncontrolledTooltip>
+                    </>
+                }
+            </ButtonGroup>
             <input onChange={handleShowImage} multiple={false} ref={fileInputRef} type="file" hidden/>
 
             <Modal isOpen={modalOpen} toggle={handleCloseModal} size="md">

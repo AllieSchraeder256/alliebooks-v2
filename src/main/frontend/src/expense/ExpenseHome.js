@@ -172,7 +172,7 @@ const ExpenseHome = () => {
                 </UncontrolledTooltip>
             </FormGroup>
             <div className="ms-auto">
-                <ImageUploadModal from="expenseNew" buttonText="New Expense" buttonColor="success" />
+                <ImageUploadModal from="expenseNew" buttonText="New Expense" buttonColor="success" showNoImageOption />
             </div>
         </div>
         { searchTypeAdvanced ? detailedFilterDiv : basicFilterDiv }

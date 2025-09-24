@@ -35,7 +35,7 @@ const ImageViewModal = ({ resourceId, buttonLabel = "Image" }) => {
                         <div>Loading...</div>
                     ) : sourceImage ? (
                     <>
-                        <img src={`data:image/jpeg;base64,${sourceImage.data}`} alt="Resource image" style={{objectFit: 'cover', maxHeight:'100vh', maxWidth:'100%'}} />
+                        <img src={`data:image/jpeg;base64,${sourceImage.data}`} alt="Source" style={{objectFit: 'cover', maxHeight:'100vh', maxWidth:'100%'}} />
 
                         <Button size="sm" color="link" onClick={() => setShowMetadata(!showMetadata)}>{showMetadata ? 'Hide' : 'Show'} Metadata</Button>
                         {showMetadata && <div>

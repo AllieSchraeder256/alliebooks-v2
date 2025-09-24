@@ -56,15 +56,11 @@ const TenantDetails = () => {
             </Row>
             <h5>Current Leases</h5>
             { tenant.tenantLeases && tenant.tenantLeases.map && tenant.tenantLeases.map(tenantLease => {
-                if (tenantLease.lease.current) {
-                    return <LeaseCard lease={tenantLease.lease} />
-                }
+                return tenantLease.lease.current ? <LeaseCard lease={tenantLease.lease} /> : "";
             }) }
             <h5>Old Leases</h5>
             { tenant.tenantLeases && tenant.tenantLeases.map && tenant.tenantLeases.map(tenantLease => {
-                if (!tenantLease.lease.current) {
-                    return <LeaseCard lease={tenantLease.lease} />
-                }
+                return !tenantLease.lease.current ? <LeaseCard lease={tenantLease.lease} /> : "";
             }) }
         </div>
         </>
