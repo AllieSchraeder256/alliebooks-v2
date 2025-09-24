@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/expense-types")
+@RequestMapping("/api/expense-types")
 public class ExpenseTypeController {
     @Autowired
     private ExpenseTypeService expenseTypeService;

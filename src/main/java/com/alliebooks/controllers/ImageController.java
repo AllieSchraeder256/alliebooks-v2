@@ -11,12 +11,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.UUID;
 import java.util.logging.Logger;
 
 @RestController
-@RequestMapping("/images")
+@RequestMapping("/api/images")
 public class ImageController {
     private static final Logger logger = Logger.getLogger(ImageController.class.getName());
 

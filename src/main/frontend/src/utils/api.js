@@ -23,7 +23,8 @@ export async function apiFetch(input, options = {}) {
       }
       throw new Error('Unauthorized');
     }*/
-    const res = await fetch(input, { ...options });
+    console.log("Calling /api" + input);
+    const res = await fetch("/api" + input, { ...options });
     return res;
   } catch (err) {
     throw err;

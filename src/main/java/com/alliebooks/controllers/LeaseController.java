@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/leases")
+@RequestMapping("/api/leases")
 public class LeaseController {
     @Autowired
     private LeaseService leaseService;

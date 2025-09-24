@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/rent-payments")
+@RequestMapping("/api/rent-payments")
 public class RentPaymentController {
     @Autowired
     private RentPaymentService rentPaymentService;

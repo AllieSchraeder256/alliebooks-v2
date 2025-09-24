@@ -12,7 +12,7 @@ import java.net.URISyntaxException;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/notes")
+@RequestMapping("/api/notes")
 public class NoteController {
     @Autowired
     private NoteService noteService;

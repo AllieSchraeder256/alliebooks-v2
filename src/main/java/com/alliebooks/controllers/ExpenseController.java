@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/expenses")
+@RequestMapping("/api/expenses")
 public class ExpenseController {
     @Autowired
     private ExpenseService expenseService;

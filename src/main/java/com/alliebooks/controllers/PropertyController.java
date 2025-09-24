@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/properties")
+@RequestMapping("/api/properties")
 public class PropertyController {
     @Autowired
     private PropertyService propertyService;
