@@ -12,7 +12,6 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Alliebooks-v2</name>
 	<description>Alliebooks Version 2</description>
-	<packaging>war</packaging>
 
 	<properties>
 		<java.version>21</java.version>
@@ -28,12 +27,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<!-- Use external Tomcat; mark embedded Tomcat as provided -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -128,7 +121,6 @@
 	</dependencies>
 
 	<build>
-		<finalName>ROOT</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -149,13 +141,11 @@
 				<groupId>com.github.eirslett</groupId>
 				<artifactId>frontend-maven-plugin</artifactId>
 				<version>${frontend-maven-plugin.version}</version>
-
 				<configuration>
 					<nodeVersion>${node.version}</nodeVersion>
 					<workingDirectory>${frontend-src-dir}</workingDirectory>
 					<installDirectory>${project.build.directory}</installDirectory>
 				</configuration>
-
 				<executions>
 					<execution>
 						<id>install-frontend-tools</id>
@@ -163,7 +153,6 @@
 							<goal>install-node-and-npm</goal>
 						</goals>
 					</execution>
-
 					<execution>
 						<id>npm-install</id>
 						<goals>
@@ -173,7 +162,6 @@
 							<arguments>install</arguments>
 						</configuration>
 					</execution>
-
 					<execution>
 						<id>build-frontend</id>
 						<goals>
@@ -221,7 +209,5 @@
 				</configuration>
 			</plugin>
 		</plugins>
-
 	</build>
-
 </project>
