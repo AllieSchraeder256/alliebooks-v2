@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from 'reactstrap';
+import { Button, Collapse } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import LeaseCard from './LeaseCard';
 import { apiFetch } from '../utils/api';
 
 const LeaseHome = () => {
 
-const [leases, setLeases] = useState('');
-const [oldLeases, setOldLeases] = useState('');
+    const [leases, setLeases] = useState('');
+    const [oldLeases, setOldLeases] = useState('');
+    const [collapse, setCollapse] = useState(false);
 
     useEffect(() => {
         loadLeases();
@@ -22,6 +23,7 @@ const [oldLeases, setOldLeases] = useState('');
         const oldLeases = await (await apiFetch(`/leases/old-leases`)).json();
         setOldLeases(oldLeases);
     }
+    const toggle = () => setCollapse(!collapse);
 
     return (
         <>
@@ -32,11 +34,15 @@ const [oldLeases, setOldLeases] = useState('');
         { leases && leases.map && leases.map(lease => {
             return <LeaseCard key={lease.id} lease={lease} />
         }) }
-
-        <h3>Old Leases ({oldLeases.length})</h3>
-        { oldLeases && oldLeases.map && oldLeases.map(oldLease => {
-            return <LeaseCard key={oldLease.id} lease={oldLease} />
-        }) }
+        <div className="d-flex align-items-center mb-2">
+            <h3>Old Leases ({oldLeases.length})</h3>
+            <Button color="link" onClick={toggle}>{collapse ? "Hide" : "Show"}</Button>
+        </div>
+        <Collapse isOpen={collapse}>
+            { oldLeases && oldLeases.map && oldLeases.map(oldLease => {
+                return <LeaseCard key={oldLease.id} lease={oldLease} />
+            }) }
+        </Collapse>
         </>
     );
 }
