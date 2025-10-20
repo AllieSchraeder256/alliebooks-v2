@@ -1,6 +1,7 @@
 package com.alliebooks.controllers;
 
 import com.alliebooks.models.ExpenseType;
+import com.alliebooks.services.BaseCrudService;
 import com.alliebooks.services.ExpenseTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,12 +11,15 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/api/expense-types")
 public class ExpenseTypeController {
     @Autowired
     private ExpenseTypeService expenseTypeService;
+
+    private static final Logger logger = Logger.getLogger(ExpenseTypeController.class.getName());
 
     @GetMapping
     public List<ExpenseType> getExpenseTypes() {
@@ -24,6 +28,7 @@ public class ExpenseTypeController {
 
     @GetMapping("/{id}")
     public ExpenseType getExpenseType(@PathVariable UUID id) throws Exception {
+        logger.info("Test logger GET");
         var expenseTypeOption = expenseTypeService.findById(id);
         if (expenseTypeOption.isPresent()) {
             return expenseTypeOption.get();
@@ -34,6 +39,7 @@ public class ExpenseTypeController {
 
     @PostMapping
     public ResponseEntity<ExpenseType> create(@RequestBody ExpenseType expenseType) throws URISyntaxException {
+        logger.info("Test logger POST");
         ExpenseType savedExpenseType = expenseTypeService.save(expenseType);
         return ResponseEntity.created(new URI("/ExpenseTypes/" + savedExpenseType.getId())).body(savedExpenseType);
     }
