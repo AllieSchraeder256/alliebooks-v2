@@ -1,0 +1,1 @@
+ALTER TABLE expenses ADD COLUMN legacy_image_filename VARCHAR;

@@ -2,7 +2,6 @@ package com.alliebooks.services;
 
 import com.alliebooks.models.Expense;
 import com.alliebooks.repositories.ExpenseRepo;
-import com.alliebooks.repositories.ExpenseRepo;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -26,7 +25,7 @@ public class ExpenseService extends BaseCrudService<Expense> {
 		var expenses = repository.findByParameters(start, end, propertyId, expenseTypeId, searchText == null ? null : searchText.toLowerCase());
 
 		for (var expense : expenses) {
-			expense.setHasImage(imageService.hasImage(expense.getId()));
+			expense.setHasImage(expense.getLegacyImageFilename() != null || imageService.hasImage(expense.getId()));
 		}
 		return expenses;
 	}
@@ -34,7 +33,7 @@ public class ExpenseService extends BaseCrudService<Expense> {
 	@Override
 	public Optional<Expense> findById(UUID id) {
 		var expense = super.findById(id);
-        expense.ifPresent(e -> e.setHasImage(imageService.hasImage(id)));
+        expense.ifPresent(e -> e.setHasImage(e.getLegacyImageFilename() != null || imageService.hasImage(id)));
 		return expense;
 	}
 }

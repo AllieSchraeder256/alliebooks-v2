@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -22,6 +21,9 @@ public class Expense extends BaseModel {
 
 	@Column(name="image_path")
 	private String imagePath;
+
+	@Column(name="legacy_image_filename")
+	private String legacyImageFilename;
 
 	@Transient
 	private boolean hasImage;
