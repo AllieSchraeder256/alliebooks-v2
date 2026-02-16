@@ -1321,5 +1321,5 @@ insert into expenses (id, amount, note, merchant, paid_on, property_id, expense_
 insert into expenses (id, amount, note, merchant, paid_on, property_id, expense_type_id, legacy_image_filename) values ('13be5bc7-46ae-43fa-b3f4-5b54b9215488', '44.52', '', 'lowes','2025-08-16','10a3fd1f-7a26-4ec5-9e13-5837eb74d9af','c735181f-05a6-4c69-9988-4c9eeea6f4e9', '2025-08_lowes_5305c1e5-d2f3-4fea-a8e6-4f078cbcf32a.jpg');
 insert into expenses (id, amount, note, merchant, paid_on, property_id, expense_type_id, legacy_image_filename) values ('f4d17507-8a95-4028-aef8-da43b4b8e7d8', '111.94', '', 'lowes','2025-07-05','10a3fd1f-7a26-4ec5-9e13-5837eb74d9af','c735181f-05a6-4c69-9988-4c9eeea6f4e9', '2025-08_lowes_b778d8ce-895a-4c93-8a3a-83481b2cb4e0.jpg');
 insert into expenses (id, amount, note, merchant, paid_on, property_id, expense_type_id, legacy_image_filename) values ('da94602a-8730-4179-b9f5-88c8d9560424', '30.19', '', 'lowes','2025-04-06','10a3fd1f-7a26-4ec5-9e13-5837eb74d9af','c735181f-05a6-4c69-9988-4c9eeea6f4e9', '2025-04_lowes_ac58e8b9-b803-41c6-a304-aa13df968793.jpg');
-
+--
  */
