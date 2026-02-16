@@ -20,6 +20,7 @@ import AdminHome from "./admin/AdminHome";
 import LoginForm from './components/LoginForm';
 import OcrTokenList from './admin/OcrTokenList';
 import OcrTokenEdit from './admin/OcrTokenEdit';
+import ReportHome from './reports/ReportHome';
 
 function App() {
     return (
@@ -50,6 +51,7 @@ function App() {
                             <Route path='/admin' exact={true} element={<AdminHome />}/>
                             <Route path='/ocr-tokens' exact={true} element={<OcrTokenList />}/>
                             <Route path='/ocr-tokens/:id' element={<OcrTokenEdit />}/>
+                            <Route path='/reports' exact={true} element={<ReportHome />}/>
                         {/*</Route>*/}
                     </Route>
                 </Routes>
