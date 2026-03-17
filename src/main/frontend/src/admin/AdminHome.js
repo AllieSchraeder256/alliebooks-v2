@@ -3,6 +3,7 @@ import { Container, Table, Row, Col } from 'reactstrap';
 import SignupForm from '../components/SignupForm';
 import { apiFetch } from '../utils/api';
 import OcrTokenList from './OcrTokenList';
+import ExpenseTypeList from './ExpenseTypeList';
 
 const AdminHome = () => {
     const [users, setUsers] = useState([]);
@@ -44,6 +45,10 @@ const AdminHome = () => {
                 <Col md={6}>
                     <SignupForm />
                 </Col>
+            </Row>
+            <hr />
+            <Row>
+                <ExpenseTypeList />
             </Row>
             <hr />
             <Row>

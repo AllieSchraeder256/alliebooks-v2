@@ -1,5 +1,6 @@
 package com.alliebooks.controllers;
 
+import com.alliebooks.models.reports.ExpenseReport;
 import com.alliebooks.models.reports.ProfitLossReport;
 import com.alliebooks.services.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,12 @@ public class ReportController {
     private ReportService reportService;
 
     @GetMapping("/profit-loss")
-    public List<ProfitLossReport> getProfitLoss(
-             @RequestParam(required = false) String year) throws Exception {
-
+    public List<ProfitLossReport> getProfitLoss(@RequestParam(required = false) String year) throws Exception {
         return reportService.getProfitLossReport(year);
+    }
+
+    @GetMapping("/expense")
+    public List<ExpenseReport> getExpense(@RequestParam(required = false) String year) throws Exception {
+        return reportService.getExpenseReport(year);
     }
 }

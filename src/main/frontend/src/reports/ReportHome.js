@@ -1,27 +1,17 @@
 import React, {useState} from 'react';
 import {
-    Accordion,
+    UncontrolledAccordion,
     AccordionBody,
     AccordionHeader,
     AccordionItem
 } from 'reactstrap';
 import ProfitLossReport from './ProfitLossReport';
+import ExpenseReport from './ExpenseReport';
 
 const ReportHome = () => {
-    // Open the first accordion section by default
-    const [accordionOpen, setAccordionOpen] = useState('1');
-
-    const toggle = (id) => {
-        if (accordionOpen === id) {
-            setAccordionOpen('');
-        } else {
-            setAccordionOpen(id);
-        }
-    };
-
     return (
         <>
-        <Accordion flush open={accordionOpen} toggle={toggle} style={{padding: '0px'}}>
+        <UncontrolledAccordion stayOpen defaultOpen={['1', '2']}  style={{padding: '0px'}}>
             <AccordionItem>
                 <AccordionHeader targetId="1">
                     Profit and Loss
@@ -29,8 +19,14 @@ const ReportHome = () => {
                 <AccordionBody accordionId="1">
                     <ProfitLossReport />
                 </AccordionBody>
+                <AccordionHeader targetId="2">
+                    Expense Detail
+                </AccordionHeader>
+                <AccordionBody accordionId="2">
+                    <ExpenseReport />
+                </AccordionBody>
             </AccordionItem>
-        </Accordion>
+        </UncontrolledAccordion>
         </>
     );
 }

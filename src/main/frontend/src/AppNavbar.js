@@ -18,7 +18,6 @@ export const AppNavbar = () => {
                         <Nav.Link as={Link} to="/properties">Properties</Nav.Link>
                         <Nav.Link as={Link} to="/tenants">Tenants</Nav.Link>
                         <Nav.Link as={Link} to="/reports">Reports</Nav.Link>
-                        <Nav.Link as={Link} to="/expense-types">Expense Types</Nav.Link>
                         <Nav.Link as={Link} to="/admin">Admin</Nav.Link>
                     </Nav>
                 </Container>
