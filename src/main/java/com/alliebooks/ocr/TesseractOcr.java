@@ -1,5 +1,6 @@
 package com.alliebooks.ocr;
 
+import com.alliebooks.config.NativeLibDiagnostics;
 import net.sourceforge.tess4j.Tesseract;
 import org.apache.tika.Tika;
 import org.apache.tika.mime.MimeType;
@@ -40,10 +41,23 @@ public class TesseractOcr {
             tesseract.setLanguage("eng");
             tesseract.setPageSegMode(3);
             tesseract.setOcrEngineMode(1);
+
             String result = tesseract.doOCR(file);
+
+            // After first successful OCR call, log the resolved native libs.
+            NativeLibDiagnostics.dumpLoadedNativeLibMappings("after tesseract.doOCR (success)");
 
             logger.info(String.format("Read image text=[%s]", result));
             return ocrParser.parse(result);
+        } catch (UnsatisfiedLinkError ule) {
+            // Critical for debugging: capture what actually got loaded/resolved.
+            try {
+                NativeLibDiagnostics.dumpLoadedNativeLibMappings("after tesseract.doOCR (UnsatisfiedLinkError)");
+            } catch (Exception ignored) {
+                // don't hide the original error
+            }
+            logger.log(Level.SEVERE, "Native library linkage error while running OCR", ule);
+            return null;
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Can't create temp file for input stream", e);
             return null;

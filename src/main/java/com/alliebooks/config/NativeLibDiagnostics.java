@@ -51,9 +51,7 @@ public class NativeLibDiagnostics implements ApplicationRunner {
         // Print where the process is currently running from (useful for systemd)
         log.info("user.dir={}", System.getProperty("user.dir"));
 
-        // On Linux, /proc/self/maps shows the actual resolved full paths of loaded .so files.
-        // This is the single best source of truth when debugging 'undefined symbol' issues.
-        tryLogProcMapsMatches();
+        dumpLoadedNativeLibMappings("startup");
 
         // Some routers prefer ldconfig view; safe to attempt and ignore failures.
         tryLogLdconfigMatches();
@@ -72,42 +70,51 @@ public class NativeLibDiagnostics implements ApplicationRunner {
         }
     }
 
-    private static void tryLogProcMapsMatches() {
+    /**
+     * Dump currently loaded native libs of interest by reading /proc/self/maps (Linux only).
+     *
+     * This is safe to call multiple times. It helps confirm exactly which liblept/libtesseract
+     * the JVM ended up using.
+     */
+    public static void dumpLoadedNativeLibMappings(String reason) {
         String osName = System.getProperty("os.name", "").toLowerCase();
         if (!osName.contains("linux")) {
-            log.info("/proc/self/maps dump skipped (not Linux)");
+            log.info("/proc/self/maps dump skipped (not Linux) reason={}", reason);
             return;
         }
 
         Path maps = Path.of("/proc/self/maps");
         if (!Files.exists(maps)) {
-            log.info("/proc/self/maps not present; cannot inspect loaded native libraries");
+            log.info("/proc/self/maps not present; cannot inspect loaded native libraries reason={}", reason);
             return;
         }
 
         List<String> matches = new ArrayList<>();
         try {
             for (String line : Files.readAllLines(maps, StandardCharsets.UTF_8)) {
-                // Typical interesting libs for this app's OCR stack
                 if (line.contains("libtesseract") || line.contains("liblept") || line.contains("tess4j")) {
                     matches.add(line);
                 }
             }
         } catch (IOException e) {
-            log.warn("Failed reading /proc/self/maps", e);
+            log.warn("Failed reading /proc/self/maps reason={}", reason, e);
             return;
         }
 
         if (matches.isEmpty()) {
-            log.info("/proc/self/maps: no loaded entries matching libtesseract/liblept/tess4j (yet)");
-            log.info("Note: these libs may only load once OCR runs; re-check after the first OCR request.");
+            log.info("/proc/self/maps: no loaded entries matching libtesseract/liblept/tess4j reason={}", reason);
             return;
         }
 
-        log.info("/proc/self/maps entries containing libtesseract/liblept/tess4j:");
+        log.info("/proc/self/maps entries containing libtesseract/liblept/tess4j reason={}", reason);
         for (String line : matches) {
             log.info("maps: {}", line);
         }
+    }
+
+    private static void tryLogProcMapsMatches() {
+        // Backwards compatible: keep this method, but delegate.
+        dumpLoadedNativeLibMappings("startup (legacy)");
     }
 
     private static void tryLogLdconfigMatches() {
@@ -166,4 +173,3 @@ public class NativeLibDiagnostics implements ApplicationRunner {
         }
     }
 }
-
