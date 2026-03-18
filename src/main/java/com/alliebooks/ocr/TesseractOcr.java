@@ -27,6 +27,19 @@ public class TesseractOcr {
     @Autowired
     private OcrParser ocrParser;
 
+    /**
+     * If set, we will attempt to preload native .so files from this directory using System.load().
+     *
+     * This is the most reliable way to ensure lept4j/tess4j bind to the intended
+     * liblept/libtesseract pair and avoid the common "undefined symbol" mismatch.
+     *
+     * Set via either:
+     *  - env: ALLIEBOOKS_TESS_NATIVE_DIR
+     *  - JVM: -Dalliebooks.tess.nativeDir=/path
+     */
+    private static final String NATIVE_DIR_ENV = "ALLIEBOOKS_TESS_NATIVE_DIR";
+    private static final String NATIVE_DIR_PROP = "alliebooks.tess.nativeDir";
+
     public TesseractOcr() {
         tika = new Tika();
         tesseract = new Tesseract();
@@ -35,6 +48,9 @@ public class TesseractOcr {
     public ReceiptData doOcr(MultipartFile input) {
         try {
             var file = createTempFile(input);
+
+            // Preload native libs (if configured) BEFORE any lept4j classes initialize.
+            preloadNativeLibsIfConfigured();
 
             tesseract.setVariable("user_defined_dpi", "72");
             tesseract.setDatapath(TRAINING_DATA_PATH);
@@ -61,6 +77,42 @@ public class TesseractOcr {
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Can't create temp file for input stream", e);
             return null;
+        }
+    }
+
+    private static void preloadNativeLibsIfConfigured() {
+        String dir = System.getProperty(NATIVE_DIR_PROP);
+        if (dir == null || dir.isBlank()) {
+            dir = System.getenv(NATIVE_DIR_ENV);
+        }
+        if (dir == null || dir.isBlank()) {
+            return;
+        }
+
+        dir = dir.trim();
+        // In practice, loading liblept first tends to avoid resolution falling back to /lib.
+        // We try the common SONAME filenames; failures are logged but non-fatal.
+        String lept = dir.endsWith("/") ? (dir + "liblept.so.5") : (dir + "/liblept.so.5");
+        String tess = dir.endsWith("/") ? (dir + "libtesseract.so.5") : (dir + "/libtesseract.so.5");
+
+        try {
+            logger.info("Preloading native library: " + lept);
+            System.load(lept);
+            logger.info("Preloaded OK: " + lept);
+        } catch (UnsatisfiedLinkError e) {
+            logger.warning("Could not preload " + lept + ": " + e.getMessage());
+        } catch (SecurityException e) {
+            logger.warning("Security manager blocked preload of " + lept + ": " + e.getMessage());
+        }
+
+        try {
+            logger.info("Preloading native library: " + tess);
+            System.load(tess);
+            logger.info("Preloaded OK: " + tess);
+        } catch (UnsatisfiedLinkError e) {
+            logger.warning("Could not preload " + tess + ": " + e.getMessage());
+        } catch (SecurityException e) {
+            logger.warning("Security manager blocked preload of " + tess + ": " + e.getMessage());
         }
     }
 
