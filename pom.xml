@@ -21,10 +21,6 @@
 		<node.version>v18.17.1</node.version>
 		<frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
         <lombok.version>1.18.38</lombok.version>
-		<!-- tess4j -->
-		<tess4j.version>5.16.0</tess4j.version>
-		<tess4j.patched.jar>${project.build.directory}/patched-deps/tess4j-${tess4j.version}.jar</tess4j.patched.jar>
-		<tess4j.native.dir>${project.basedir}/src/main/resources/native/linux-x86-64</tess4j.native.dir>
 	</properties>
 
 	<dependencies>
@@ -84,7 +80,7 @@
 		<dependency>
 			<groupId>net.sourceforge.tess4j</groupId>
 			<artifactId>tess4j</artifactId>
-			<version>${tess4j.version}</version>
+			<version>5.16.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tika</groupId>
@@ -212,125 +208,6 @@
 					</excludes>
 				</configuration>
 			</plugin>
-
-			<!-- Patch tess4j jar with Linux native libs at build time (reproducible, no ~/.m2 editing) -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>3.6.1</version>
-				<executions>
-					<execution>
-						<id>copy-tess4j-jar-for-patching</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>net.sourceforge.tess4j</groupId>
-									<artifactId>tess4j</artifactId>
-									<version>${tess4j.version}</version>
-									<outputDirectory>${project.build.directory}/patched-deps</outputDirectory>
-									<destFileName>tess4j-${tess4j.version}.jar</destFileName>
-								</artifactItem>
-							</artifactItems>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>3.3.0</version>
-				<executions>
-					<execution>
-						<id>patch-tess4j-jar-linux-x86-64</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-						<configuration>
-							<executable>bash</executable>
-							<arguments>
-								<argument>-lc</argument>
-								<argument>
-									<![CDATA[
-set -euo pipefail
-JAR="${tess4j.patched.jar}"
-NATIVE_SRC="${tess4j.native.dir}"
-WORK_DIR="${project.build.directory}/tess4j-native"
-NATIVE_DIR_NAME="linux-x86-64"
-
-# Skip patching if no native libs are provided
-if ! ls "${NATIVE_SRC}"/libtesseract.so* >/dev/null 2>&1; then
-  echo "No ${NATIVE_SRC}/libtesseract.so* found; skipping tess4j jar patch step."
-  exit 0
-fi
-if ! ls "${NATIVE_SRC}"/liblept.so* >/dev/null 2>&1; then
-  echo "No ${NATIVE_SRC}/liblept.so* found; skipping tess4j jar patch step."
-  exit 0
-fi
-
-mkdir -p "${WORK_DIR}/${NATIVE_DIR_NAME}"
-rm -f "${WORK_DIR:?}/${NATIVE_DIR_NAME}"/libtesseract.so* "${WORK_DIR:?}/${NATIVE_DIR_NAME}"/liblept.so* || true
-
-cp -a "${NATIVE_SRC}"/libtesseract.so* "${WORK_DIR}/${NATIVE_DIR_NAME}/"
-cp -a "${NATIVE_SRC}"/liblept.so* "${WORK_DIR}/${NATIVE_DIR_NAME}/"
-
-# Ensure the directory is added/updated in the jar
-cd "${WORK_DIR}"
-jar uf "${JAR}" "${NATIVE_DIR_NAME}"
-
-echo "Patched ${JAR} with native libs under ${NATIVE_DIR_NAME}/"
-									]]>
-								</argument>
-							</arguments>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-			<!-- Make Spring Boot use the patched tess4j jar if it exists (so it wins on the classpath) -->
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-					<!-- Include the patched jar into the repackaged boot jar -->
-					<includeSystemScope>true</includeSystemScope>
-				</configuration>
-			</plugin>
-
-			<!-- Add the patched tess4j jar as a system-scoped dependency for repackaging -->
 		</plugins>
 	</build>
-
-	<!-- System dependency pointing at the patched jar produced during the build.
-	     This is only used when patching is enabled (libs present). -->
-	<profiles>
-		<profile>
-			<id>use-patched-tess4j</id>
-			<activation>
-				<file>
-					<exists>${tess4j.native.dir}/libtesseract.so</exists>
-				</file>
-			</activation>
-			<dependencies>
-				<dependency>
-					<groupId>net.sourceforge.tess4j</groupId>
-					<artifactId>tess4j-patched</artifactId>
-					<version>${tess4j.version}</version>
-					<scope>system</scope>
-					<systemPath>${tess4j.patched.jar}</systemPath>
-				</dependency>
-			</dependencies>
-		</profile>
-	</profiles>
 </project>
