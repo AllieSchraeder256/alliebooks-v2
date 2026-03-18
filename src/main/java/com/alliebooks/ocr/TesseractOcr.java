@@ -90,30 +90,50 @@ public class TesseractOcr {
         }
 
         dir = dir.trim();
-        // In practice, loading liblept first tends to avoid resolution falling back to /lib.
-        // We try the common SONAME filenames; failures are logged but non-fatal.
-        String lept = dir.endsWith("/") ? (dir + "liblept.so.5") : (dir + "/liblept.so.5");
-        String tess = dir.endsWith("/") ? (dir + "libtesseract.so.5") : (dir + "/libtesseract.so.5");
-
-        try {
-            logger.info("Preloading native library: " + lept);
-            System.load(lept);
-            logger.info("Preloaded OK: " + lept);
-        } catch (UnsatisfiedLinkError e) {
-            logger.warning("Could not preload " + lept + ": " + e.getMessage());
-        } catch (SecurityException e) {
-            logger.warning("Security manager blocked preload of " + lept + ": " + e.getMessage());
+        if (dir.endsWith("/")) {
+            dir = dir.substring(0, dir.length() - 1);
         }
 
-        try {
-            logger.info("Preloading native library: " + tess);
-            System.load(tess);
-            logger.info("Preloaded OK: " + tess);
-        } catch (UnsatisfiedLinkError e) {
-            logger.warning("Could not preload " + tess + ": " + e.getMessage());
-        } catch (SecurityException e) {
-            logger.warning("Security manager blocked preload of " + tess + ": " + e.getMessage());
+        // Try common names in order. The goal is to ensure Leptonica is loaded from this
+        // directory before lept4j (JNA) registers its mappings.
+        String[] leptCandidates = new String[] {
+                dir + "/liblept.so.5",
+                dir + "/liblept.so.5.0.4",
+                dir + "/liblept.so.5.0.5",
+                dir + "/liblept.so",
+        };
+
+        String[] tessCandidates = new String[] {
+                dir + "/libtesseract.so.5",
+                dir + "/libtesseract.so.5.0.3",
+                dir + "/libtesseract.so.5.0.4",
+                dir + "/libtesseract.so",
+        };
+
+        // load Leptonica first
+        boolean leptLoaded = tryLoadFirst("Leptonica", leptCandidates);
+        boolean tessLoaded = tryLoadFirst("Tesseract", tessCandidates);
+
+        if (leptLoaded || tessLoaded) {
+            NativeLibDiagnostics.dumpLoadedNativeLibMappings("after native preload");
         }
+    }
+
+    private static boolean tryLoadFirst(String label, String[] candidates) {
+        for (String path : candidates) {
+            try {
+                logger.info("Preloading " + label + " native library: " + path);
+                System.load(path);
+                logger.info("Preloaded OK: " + path);
+                return true;
+            } catch (UnsatisfiedLinkError e) {
+                logger.fine("Could not preload " + path + ": " + e.getMessage());
+            } catch (SecurityException e) {
+                logger.warning("Security manager blocked preload of " + path + ": " + e.getMessage());
+            }
+        }
+        logger.warning("Failed to preload " + label + " native library from configured directory. Tried: " + String.join(", ", candidates));
+        return false;
     }
 
     private static File createTempFile(MultipartFile input) throws IOException, MimeTypeException {
