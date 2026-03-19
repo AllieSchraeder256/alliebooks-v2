@@ -52,11 +52,7 @@ const LiveLogs = () => {
     setError(null);
 
     const sinceId = lastEventIdRef.current || 0;
-    // When running via the React dev server (:3000), the CRA `proxy` can be flaky for SSE.
-    // Connect directly to the backend origin to avoid proxy buffering.
-    const backendOrigin = (typeof window !== 'undefined' && window.location && window.location.port === '3000')
-      ? 'http://localhost:8080'
-      : '';
+    const backendOrigin = 'http://localhost:8080';
     const url = `${backendOrigin}/api/admin/logs/stream-raw?sinceId=${encodeURIComponent(sinceId)}`;
 
     const es = new EventSource(url);
