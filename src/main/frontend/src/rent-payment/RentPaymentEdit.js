@@ -77,6 +77,21 @@ const RentPaymentEdit = () => {
         return { value: leaseSummary.leaseId, label: leaseSummary.details };
     });
 
+    // Default the lease for a NEW rent payment to the first current-lease entry when the list loads.
+    useEffect(() => {
+        // If creating a new rent payment, no leaseId query param provided, and we have lease summary data,
+        // default to the first lease and load its details so amount/dueOn are populated.
+        if (id === 'new' && !leaseId && currentLeaseSummary && currentLeaseSummary.length > 0) {
+            const firstLeaseId = currentLeaseSummary[0].leaseId;
+            setRentPayment(prev => {
+                if (prev && prev.leaseId !== null && prev.leaseId !== undefined && prev.leaseId !== '') return prev;
+                return { ...prev, leaseId: firstLeaseId };
+            });
+            // populate fields from the lease (amount, dueOn)
+            loadLease(firstLeaseId);
+        }
+    }, [currentLeaseSummary, id, leaseId]);
+
     function handleSubmit(event) {
         event.preventDefault();
         saveRentPayment();
@@ -143,10 +158,7 @@ const RentPaymentEdit = () => {
                                     options={currentLeaseOptions}
                                     components={animatedComponents}
                                     onChange={choice => setSelectedLease(choice)}
-                                    value = {currentLeaseOptions ? currentLeaseOptions.find(option => option.value === rentPayment.leaseId) : null}
-                                    placeholder="Lease"
-                                    backspaceRemovesValue
-                                    isClearable />
+                                    value = {currentLeaseOptions ? currentLeaseOptions.find(option => option.value === rentPayment.leaseId) : null} />
                             </FormGroup>
                             <FormGroup>
                                 <Label for="amount">Rent Amount</Label>

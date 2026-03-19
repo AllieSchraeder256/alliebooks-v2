@@ -117,6 +117,17 @@ const ExpenseEdit = () => {
         return { value: expenseType.id, label: expenseType.name };
     });
 
+    // Properly default the property for a NEW expense to the first property when properties load.
+    useEffect(() => {
+        if (id === 'new' && properties && properties.length > 0) {
+            setExpense(prev => {
+                // only set when no meaningful propertyId exists yet
+                if (prev && prev.propertyId !== null && prev.propertyId !== undefined && prev.propertyId !== '') return prev;
+                return { ...prev, propertyId: properties[0].id };
+            });
+        }
+    }, [properties, id]);
+
     function setSelectedProperty(choice) {
         expense.propertyId = choice ? choice.value : '';
         setExpense({...expense});
@@ -223,10 +234,7 @@ const ExpenseEdit = () => {
                                      options={propertyOptions}
                                      components={animatedComponents}
                                      onChange={choice => setSelectedProperty(choice)}
-                                     value = {propertyOptions ? propertyOptions.find(option => option.value === expense.propertyId) : null}
-                                     placeholder="Property"
-                                     backspaceRemovesValue
-                                     isClearable />
+                                     value = {propertyOptions ? propertyOptions.find(option => option.value === expense.propertyId) : null} />
                             </FormGroup>
                             <FormGroup>
                                  <Label for="expenseTypeSelect">Expense Type</Label>
@@ -266,4 +274,3 @@ const ExpenseEdit = () => {
 }
 
 export default ExpenseEdit;
-
