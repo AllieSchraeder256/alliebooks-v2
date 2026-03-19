@@ -116,18 +116,18 @@ const RentPaymentHome = () => {
 
     return (
         <>
-        <div className="d-flex justify-content-between align-items-center mb-2">
-            <h3 className="mb-0">Rent Payments</h3>
-            <Button color="success" tag={Link} to="/rent-payments/new">New Payment</Button>
-        </div>
-        <Row className = "row-cols-sm-auto align-items-center">
+        <div className="d-flex align-items-center mb-2">
+            <h3 className="mb-0 me-2">Rent Payments</h3>
             <FormGroup switch>
                 <Input type="switch" role="switch" id="searchTypeSelect" onChange={handleSearchTypeSwitch} />
                 <UncontrolledTooltip target="searchTypeSelect">
                     Advanced Search
                 </UncontrolledTooltip>
             </FormGroup>
-        </Row>
+            <div className="ms-auto">
+                <Button color="success" tag={Link} to="/rent-payments/new">New Payment</Button>
+            </div>
+        </div>
         { searchTypeAdvanced ? detailedFilterDiv : basicFilterDiv }
         <Row className="mt-3">
             <RentPaymentTable rentPayments={rentPayments} />

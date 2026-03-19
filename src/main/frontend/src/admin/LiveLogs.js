@@ -52,7 +52,24 @@ const LiveLogs = () => {
     setError(null);
 
     const sinceId = lastEventIdRef.current || 0;
-    const backendOrigin = 'http://localhost:8080';
+    // Determine backend origin:
+    // 1) If REACT_APP_API_BASE_URL is set at build time, use it.
+    // 2) If running the dev React server on localhost:3000, assume backend at http://localhost:8080.
+    // 3) Otherwise, use a relative path (same-origin) so the app works in production and avoids mixed-content issues.
+    let backendOrigin = '';
+    const envBase = (typeof process !== 'undefined' && process.env && process.env.REACT_APP_API_BASE_URL) ? process.env.REACT_APP_API_BASE_URL : null;
+    if (envBase) {
+      backendOrigin = envBase.replace(/\/$/, ''); // strip trailing slash
+    } else if (typeof window !== 'undefined') {
+      const { hostname, port } = window.location;
+      if ((hostname === 'localhost' || hostname === '127.0.0.1') && port === '3000') {
+        backendOrigin = 'http://localhost:8080';
+      } else {
+        // same-origin -> leave backendOrigin empty so URL becomes relative: /api/...
+        backendOrigin = '';
+      }
+    }
+
     const url = `${backendOrigin}/api/admin/logs/stream-raw?sinceId=${encodeURIComponent(sinceId)}`;
 
     const es = new EventSource(url);
