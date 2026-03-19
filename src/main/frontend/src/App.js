@@ -21,6 +21,7 @@ import LoginForm from './components/LoginForm';
 import OcrTokenList from './admin/OcrTokenList';
 import OcrTokenEdit from './admin/OcrTokenEdit';
 import ReportHome from './reports/ReportHome';
+import LiveLogs from './admin/LiveLogs';
 
 function App() {
     return (
@@ -49,6 +50,7 @@ function App() {
                             <Route path='/expenses' exact={true} element={<ExpenseHome />}/>
                             <Route path='/expenses/:id' element={<ExpenseEdit />}/>
                             <Route path='/admin' exact={true} element={<AdminHome />}/>
+                            <Route path='/admin/logs' exact={true} element={<LiveLogs />}/>
                             <Route path='/ocr-tokens' exact={true} element={<OcrTokenList />}/>
                             <Route path='/ocr-tokens/:id' element={<OcrTokenEdit />}/>
                             <Route path='/reports' exact={true} element={<ReportHome />}/>

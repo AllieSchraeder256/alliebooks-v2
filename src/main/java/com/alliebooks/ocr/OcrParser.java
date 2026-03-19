@@ -59,7 +59,7 @@ public class OcrParser {
             }
         }
 
-        logger.info("Unable top parse merchant");
+        logger.info("Unable to parse merchant");
         return null;
     }
 
